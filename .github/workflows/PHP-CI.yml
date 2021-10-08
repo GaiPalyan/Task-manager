@@ -1,0 +1,32 @@
+name: PHP CI
+
+# Trigger the workflow on push or pull request
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          # Specify the PHP version
+          php-version: '8.0'
+
+        #Install
+      - name: Install
+        run: make install
+
+        #Run set-up
+      - name: set up project
+        run: make setup
+
+        # Run Linter
+      - name: Run linter
+        run: make lint
+
+        # Run tests
+      - name: test
+        run: make test
