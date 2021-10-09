@@ -1,0 +1,9 @@
+@import "~bootstrap/scss/bootstrap";
+
+html, body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  font-weight: 600;
+}
