@@ -1,5 +1,7 @@
 <?php
-use App\Http\Controllers\UserController;
+
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('main');
+    return view('welcome');
 })->name('main');
-Route::get('register', [UserController::class, 'create'])->name('register_index');
-Route::post('register', [UserController::class, 'store'])->name('register_store');
+
+Auth::routes(['verify' => true]);
+Route::get('/home', [HomeController::class, 'index'])->middleware('verified')->name('home');
+

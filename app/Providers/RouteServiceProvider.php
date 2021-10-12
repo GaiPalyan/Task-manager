@@ -18,6 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/home';
+    public const EMAIL_NOTIFICATION = '/register/email_notify';
 
     /**
      * The controller namespace for the application.
