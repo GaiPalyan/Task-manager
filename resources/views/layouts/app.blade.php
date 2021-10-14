@@ -26,13 +26,13 @@
                     <ul class="navbar-nav mr-auto">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="">Tasks</a>
+                                <a class="nav-link" href="">{{__('Tasks')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="">Statuses</a>
+                                <a class="nav-link" href="{{route('task_statuses')}}">{{__('Statuses')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="">Labels</a>
+                                <a class="nav-link" href="">{{__('Labels')}}</a>
                             </li>
                         </ul>
                     </ul>
@@ -73,6 +73,7 @@
             </div>
         </nav>
         <main class="container py-4">
+            @include('flash::message')
             @yield('content')
         </main>
     </div>
