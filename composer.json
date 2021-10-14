@@ -8,9 +8,13 @@
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "laracasts/flash": "^3.2",
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "laravel/ui": "^3.3",
+        "laravelcollective/html": "^6.2",
+        "rollbar/rollbar-laravel": "^7.0",
         "squizlabs/php_codesniffer": "*"
     },
     "require-dev": {
@@ -36,7 +40,7 @@
         }
     },
     "scripts": {
-        "phpcs": "phpcs ",
+        "phpcs": "phpcs",
         "phpcbf": "phpcbf",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
