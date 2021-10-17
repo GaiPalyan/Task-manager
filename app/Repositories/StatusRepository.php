@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\TaskStatus;
+use App\Models\User;
 
 class StatusRepository implements DBRepositoryInterface
 {
@@ -12,9 +13,10 @@ class StatusRepository implements DBRepositoryInterface
         return compact('statuses');
     }
 
-    public function store(array $name): void
+    public function store(array $name, int $creatorId): void
     {
-        $status = TaskStatus::create($name);
+        $user = User::findOrFail($creatorId);
+        $status = $user->statuses()->make($name);
         $status->save();
     }
 
@@ -22,5 +24,27 @@ class StatusRepository implements DBRepositoryInterface
     {
         $status = TaskStatus::findOrFail($id);
         return compact('status');
+    }
+
+    public function update(array $data, int $id): void
+    {
+        $status = TaskStatus::findOrFail($id);
+        $status->fill($data);
+        $status->save();
+    }
+
+    /**
+     * @param int $id
+     * @return int|mixed|void
+     */
+    public function delete(int $id)
+    {
+        $status = TaskStatus::findorFail($id);
+
+        try {
+            $status->delete();
+        } catch (\Exception $exception) {
+            return $exception->getCode();
+        }
     }
 }

@@ -15,4 +15,9 @@ class TaskStatus extends Model
     {
         return $query->select('id', 'name', 'created_at')->orderByDesc('created_at');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

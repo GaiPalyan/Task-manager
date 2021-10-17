@@ -18,9 +18,9 @@ class StatusManager
         return $this->repository->getList();
     }
 
-    public function saveStatus(array $status)
+    public function saveStatus(array $status, int $creatorId)
     {
-       $this->repository->store($status);
+       $this->repository->store($status, $creatorId);
     }
 
     public function getStatus(int $statusId): array
@@ -28,4 +28,13 @@ class StatusManager
         return $this->repository->getItemById($statusId);
     }
 
+    public function updateStatus(array $data, int $id)
+    {
+        $this->repository->update($data, $id);
+    }
+
+    public function deleteStatus(int $statusId)
+    {
+        $this->repository->delete($statusId);
+    }
 }
