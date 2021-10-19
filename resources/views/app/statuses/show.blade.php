@@ -20,8 +20,15 @@
                     <td>{{$status->name}}</td>
                     <td>{{$status->created_at}}</td>
                     <td>
-                        <a class="text-danger" href="">{{__('delete')}}</a>
-                        <a href="{{ route('status_edit', $status) }}">{{__('edit')}}</a>
+                        @if(Auth::check())
+                        <a class="btn btn-danger btn-sm"
+                           data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('status_delete', $status) }}">
+                            {{__('delete')}}
+                        </a>
+                        <a class="btn btn-success btn-sm" href="{{ route('status_edit', $status) }}">
+                            {{__('edit')}}
+                        </a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

@@ -41,4 +41,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function statuses()
+    {
+        return $this->hasMany(TaskStatus::class, 'user_id');
+    }
 }
