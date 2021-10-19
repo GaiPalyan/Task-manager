@@ -15,7 +15,8 @@
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
         "rollbar/rollbar-laravel": "^7.0",
-        "squizlabs/php_codesniffer": "*"
+        "squizlabs/php_codesniffer": "*",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest"

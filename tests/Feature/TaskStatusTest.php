@@ -63,12 +63,21 @@ class TaskStatusTest extends TestCase
 
     public function testUpdate()
     {
+        $response = $this->post('/login', [
+            'email' => $this->user->email,
+            'password' => 'password'
+        ]);
+
         $newName = 'Updated';
         $existStatus = TaskStatus::findorFail($this->status->id);
-        $response = $this->post(route('status_update', $existStatus->id), ['name' => $newName]);
-        //$this->assertDatabaseHas('task_statuses', ['name' => 'в работе']);
-    }
+        $response = $this->patch(route('status_update', $existStatus->id), ['name' => $newName]);
+        $response->assertRedirect('task_statuses');
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('task_statuses', ['name' => $newName]);
 
+        $response = $this->get(route('task_statuses'));
+        $response->assertSeeText('Статус обновлен');
+    }
 }
 
 

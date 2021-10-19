@@ -29,7 +29,6 @@ Route::get('task_statuses/create', [StatusController::class, 'create'])->name('s
 Route::get('task_statuses/{id}/edit', [StatusController::class, 'edit'])->name('status_edit');
 Route::post('task_statuses', [StatusController::class, 'store'])->name('status_store');
 Route::patch('task_statuses/{id}', [StatusController::class, 'update'])
-    ->middleware('can:status-delete')
     ->name('status_update');
 Route::delete('task_statuses/{id}', [StatusController::class, 'delete'])->name('status_delete');
 
