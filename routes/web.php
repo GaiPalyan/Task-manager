@@ -21,7 +21,8 @@ Route::get('/', function () {
 })->name('main');
 
 Auth::routes(['verify' => true]);
-Route::get('/home', [HomeController::class, 'index'])->middleware('verified')
+Route::resource('statuses', StatusController::class);
+/*Route::get('/home', [HomeController::class, 'index'])->middleware('verified')
     ->name('home');
 Route::get('task_statuses', [StatusController::class, 'index'])
     ->name('task_statuses');
@@ -30,5 +31,5 @@ Route::get('task_statuses/{id}/edit', [StatusController::class, 'edit'])->name('
 Route::post('task_statuses', [StatusController::class, 'store'])->name('status_store');
 Route::patch('task_statuses/{id}', [StatusController::class, 'update'])
     ->name('status_update');
-Route::delete('task_statuses/{id}', [StatusController::class, 'delete'])->name('status_delete');
+Route::delete('task_statuses/{id}', [StatusController::class, 'delete'])->name('status_delete');*/
 

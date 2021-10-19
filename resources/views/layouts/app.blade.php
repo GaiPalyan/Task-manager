@@ -30,7 +30,7 @@
                                 <a class="nav-link" href="">{{__('Tasks')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('task_statuses')}}">{{__('Statuses')}}</a>
+                                <a class="nav-link" href="{{route('statuses.index')}}">{{__('Statuses')}}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="">{{__('Labels')}}</a>

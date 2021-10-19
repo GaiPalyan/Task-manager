@@ -2,7 +2,7 @@
 @section('content')
     <h1 class="mb-5">Statuses</h1>
     @if(Auth::check())
-    <a class="btn btn-primary" href="{{route('status_create')}}">{{ __('Create status') }}</a>
+    <a class="btn btn-primary" href="{{route('statuses.create')}}">{{ __('Create status') }}</a>
     @endif
     <table class="table mt-2">
         <thead>
@@ -22,10 +22,10 @@
                     <td>
                         @if(Auth::check())
                         <a class="btn btn-danger btn-sm"
-                           data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('status_delete', $status) }}">
+                           data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('statuses.destroy', $status) }}">
                             {{__('delete')}}
                         </a>
-                        <a class="btn btn-success btn-sm" href="{{ route('status_edit', $status) }}">
+                        <a class="btn btn-success btn-sm" href="{{ route('statuses.edit', $status) }}">
                             {{__('edit')}}
                         </a>
                         @endif

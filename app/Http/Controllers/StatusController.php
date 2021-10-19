@@ -26,7 +26,7 @@ class StatusController extends Controller
 
         return Auth::user()
             ? view('app.statuses.create')
-            : redirect()->route('task_statuses');
+            : redirect()->route('statuses.index');
     }
 
     public function store(StoreStatusRequest $request)
@@ -35,7 +35,7 @@ class StatusController extends Controller
         $this->manager->saveStatus($request->input(), $creatorId);
         flash(__('Статус создан'))->success();
 
-        return redirect()->route('task_statuses');
+        return redirect()->route('statuses.index');
     }
 
     public function edit(int $id)
@@ -49,14 +49,14 @@ class StatusController extends Controller
         $this->manager->updateStatus($request->input(), $id);
         flash(__('Статус обновлен'))->success();
 
-        return redirect()->route('task_statuses');
+        return redirect()->route('statuses.index');
     }
 
     /**
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete(int $id)
+    public function destroy(int $id)
     {
         $status = $this->manager->getStatus($id);
 
@@ -64,12 +64,12 @@ class StatusController extends Controller
 
         if ($response->denied()) {
             flash($response->message())->error();
-            return redirect()->route('task_statuses');
+            return redirect()->route('statuses.index');
         }
 
         $this->manager->deleteStatus($id);
         flash($response->message())->success();
 
-        return redirect()->route('task_statuses');
+        return redirect()->route('statuses.index');
     }
 }

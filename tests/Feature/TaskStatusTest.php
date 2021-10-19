@@ -21,15 +21,15 @@ class TaskStatusTest extends TestCase
 
     public function testIndex()
     {
-        $response = $this->get(route('task_statuses'));
+        $response = $this->get(route('statuses.index'));
         $response->assertOk();
         $response->assertSessionHasNoErrors();
     }
 
     public function testStatusCreateWithoutLogIn()
     {
-        $response = $this->get(route('status_create'));
-        $response->assertRedirect(route('task_statuses'));
+        $response = $this->get(route('statuses.create'));
+        $response->assertRedirect(route('statuses.index'));
     }
 
     public function testStatusCreateWithLogIn()
@@ -41,9 +41,10 @@ class TaskStatusTest extends TestCase
         $this->assertAuthenticated();
         $response->assertRedirect(route('verification.notice'));
 
-        $response = $this->get('task_statuses');
+        $response = $this->get(route('statuses.index'));
         $response->assertSeeText(__('Create status'));
-        $response = $this->get(route('status_create'));
+        $response = $this->get(route('statuses.create'));
+        $response->assertSessionHasNoErrors();
         $response->assertOk();
     }
 
@@ -55,7 +56,7 @@ class TaskStatusTest extends TestCase
         ]);
 
         $status = ['name' => 'New status'];
-        $response = $this->post(route('status_store'), $status);
+        $response = $this->post(route('statuses.store'), $status);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('task_statuses', $status);
@@ -70,12 +71,12 @@ class TaskStatusTest extends TestCase
 
         $newName = 'Updated';
         $existStatus = TaskStatus::findorFail($this->status->id);
-        $response = $this->patch(route('status_update', $existStatus->id), ['name' => $newName]);
-        $response->assertRedirect('task_statuses');
+        $response = $this->patch(route('statuses.update', $existStatus->id), ['name' => $newName]);
+        $response->assertRedirect(route('statuses.index'));
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('task_statuses', ['name' => $newName]);
 
-        $response = $this->get(route('task_statuses'));
+        $response = $this->get(route('statuses.index'));
         $response->assertSeeText('Статус обновлен');
     }
 }
