@@ -2,7 +2,7 @@
 @section('content')
     <h1 class="mb-5">Statuses</h1>
     @if(Auth::check())
-    <a class="btn btn-primary" href="{{route('statuses.create')}}">{{ __('Create status') }}</a>
+    <a class="btn btn-primary" href="{{route('statuses.create')}}">{{ __('Create Status') }}</a>
     @endif
     <table class="table mt-2">
         <thead>

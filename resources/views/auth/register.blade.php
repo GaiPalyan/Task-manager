@@ -19,14 +19,7 @@
                             </x-form.label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                       name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <x-name-form-field />
                             </div>
                         </x-form.form-item>
 
@@ -42,7 +35,9 @@
                         </x-form.form-item>
                         <x-form.form-item class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <x-form.button class="btn-primary">{{ __('Sign Up') }}</x-form.button>
+                                <button class="btn btn-primary" type="submit">
+                                    {{ __('Sign Up') }}
+                                </button>
                             </div>
                         </x-form.form-item>
                     </x-form.form>

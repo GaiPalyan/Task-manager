@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use App\Repositories\DBRepositoryInterface;
-use App\Repositories\StatusRepository;
+use App\Repositories\Status\StatusRepository;
+use App\Repositories\Status\StatusRepositoryInterface;
+
 use Illuminate\Support\ServiceProvider;
 
-class DBRerositoryServiceProvider extends ServiceProvider
+class StatusRepositoryServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -25,6 +26,6 @@ class DBRerositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(DBRepositoryInterface::class, StatusRepository::class);
+        $this->app->bind(StatusRepositoryInterface::class, StatusRepository::class);
     }
 }

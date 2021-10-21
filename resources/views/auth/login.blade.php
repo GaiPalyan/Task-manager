@@ -22,9 +22,9 @@
 
                         <x-form.form-item class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <x-form.button class="btn-primary">
+                                <button class="btn btn-primary" type="submit">
                                     {{ __('Login') }}
-                                </x-form.button>
+                                </button>
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">

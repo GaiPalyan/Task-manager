@@ -27,7 +27,7 @@
                     <ul class="navbar-nav mr-auto">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="">{{__('Tasks')}}</a>
+                                <a class="nav-link" href="{{route('tasks.index')}}">{{__('Tasks')}}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('statuses.index')}}">{{__('Statuses')}}</a>

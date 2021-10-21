@@ -42,7 +42,7 @@ class TaskStatusTest extends TestCase
         $response->assertRedirect(route('verification.notice'));
 
         $response = $this->get(route('statuses.index'));
-        $response->assertSeeText(__('Create status'));
+        $response->assertSeeText(__('Create Status'));
         $response = $this->get(route('statuses.create'));
         $response->assertSessionHasNoErrors();
         $response->assertOk();
@@ -55,7 +55,7 @@ class TaskStatusTest extends TestCase
             'password' => 'password'
         ]);
 
-        $status = ['name' => 'New status'];
+        $status = ['name' => 'New Status'];
         $response = $this->post(route('statuses.store'), $status);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();

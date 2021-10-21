@@ -2,13 +2,13 @@
 
 namespace App\Domain;
 
-use App\Repositories\DBRepositoryInterface;
+use App\Repositories\Status\StatusRepositoryInterface;
 
 class StatusManager
 {
-    private DBRepositoryInterface $repository;
+    private StatusRepositoryInterface $repository;
 
-    public function __construct(DBRepositoryInterface $repository)
+    public function __construct(StatusRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -18,9 +18,9 @@ class StatusManager
         return $this->repository->getList();
     }
 
-    public function saveStatus(array $status, int $creatorId)
+    public function saveStatus(array $data, int $creatorId)
     {
-       $this->repository->store($status, $creatorId);
+       $this->repository->store($data, $creatorId);
     }
 
     public function getStatus(int $statusId): array
