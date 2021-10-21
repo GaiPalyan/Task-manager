@@ -1,15 +1,21 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Status;
 
 use App\Models\TaskStatus;
 use App\Models\User;
 
-class StatusRepository implements DBRepositoryInterface
+class StatusRepository implements StatusRepositoryInterface
 {
     public function getList(): array
     {
         $statuses = TaskStatus::statusesList()->paginate(10);
+        return compact('statuses');
+    }
+
+    public function getUniqueNamedList(): array
+    {
+        $statuses = TaskStatus::distinct('name')->get();
         return compact('statuses');
     }
 
@@ -20,7 +26,7 @@ class StatusRepository implements DBRepositoryInterface
         $status->save();
     }
 
-    public function getItemById(int $id): array
+    public function getStatusById(int $id): array
     {
         $status = TaskStatus::findOrFail($id);
         return compact('status');

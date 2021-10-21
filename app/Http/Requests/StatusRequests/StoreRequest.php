@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\StatusRequests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
-class BaseStatusRequest extends FormRequest
+class StoreRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +23,6 @@ class BaseStatusRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => ['required']
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'required' => 'Поле не может быть пустым',
-        ];
+        return parent::rules();
     }
 }

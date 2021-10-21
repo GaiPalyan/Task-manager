@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests;
 
-class StoreStatusRequest extends BaseStatusRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class BaseRequest extends FormRequest
 {
+    protected array $baseRules = ['name' => ['required']];
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -21,6 +25,13 @@ class StoreStatusRequest extends BaseStatusRequest
      */
     public function rules()
     {
-        return parent::rules();
+        return $this->baseRules;
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => 'Поле не может быть пустым',
+        ];
     }
 }

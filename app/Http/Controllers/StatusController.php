@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Domain\StatusManager;
-use App\Http\Requests\StoreStatusRequest;
-use App\Http\Requests\UpdateStatusRequest;
+use App\Http\Requests\StatusRequests\StoreRequest;
+use App\Http\Requests\StatusRequests\UpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -29,7 +29,7 @@ class StatusController extends Controller
             : redirect()->route('statuses.index');
     }
 
-    public function store(StoreStatusRequest $request)
+    public function store(StoreRequest $request)
     {
         $creatorId = auth()->id();
         $this->manager->saveStatus($request->input(), $creatorId);
@@ -44,7 +44,7 @@ class StatusController extends Controller
         return view('app.statuses.edit', $status);
     }
 
-    public function update(UpdateStatusRequest $request, int $id)
+    public function update(UpdateRequest $request, int $id)
     {
         $this->manager->updateStatus($request->input(), $id);
         flash(__('Статус обновлен'))->success();
