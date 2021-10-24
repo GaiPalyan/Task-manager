@@ -5,48 +5,66 @@ namespace App\Http\Controllers;
 use App\Domain\StatusManager;
 use App\Http\Requests\StatusRequests\StoreRequest;
 use App\Http\Requests\StatusRequests\UpdateRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use App\Models\TaskStatus;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class StatusController extends Controller
 {
-    public function __construct(StatusManager $manager)
+    public StatusManager $statusManager;
+    public function __construct(StatusManager $statusManager)
     {
-        $this->manager = $manager;
+        $this->statusManager = $statusManager;
     }
 
-    public function index()
+    /**
+     * @return View
+     */
+    public function index(): View
     {
-        $statuses = $this->manager->getStatusList();
+        $statuses = $this->statusManager->getStatusList();
         return view('app.statuses.show', $statuses);
     }
 
-    public function create()
+    /**
+     * @return View|RedirectResponse
+     */
+    public function create(): View | RedirectResponse
     {
-
-        return Auth::user()
-            ? view('app.statuses.create')
-            : redirect()->route('statuses.index');
+        return auth()->user()
+                ? view('app.statuses.create')
+                : redirect()->route('statuses.index');
     }
 
-    public function store(StoreRequest $request)
+    /**
+     * @param StoreRequest $request
+     * @return RedirectResponse
+     */
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $creatorId = auth()->id();
-        $this->manager->saveStatus($request->input(), $creatorId);
+        $this->statusManager->saveStatus($request->all(), auth()->user());
         flash(__('Статус создан'))->success();
 
         return redirect()->route('statuses.index');
     }
 
-    public function edit(int $id)
+    /**
+     * @param TaskStatus $status
+     * @return View
+     */
+    public function edit(TaskStatus $status): View
     {
-        $status = $this->manager->getStatus($id);
-        return view('app.statuses.edit', $status);
+        return view('app.statuses.edit', compact('status'));
     }
 
-    public function update(UpdateRequest $request, int $id)
+    /**
+     * @param UpdateRequest $request
+     * @param TaskStatus $status
+     * @return RedirectResponse
+     */
+    public function update(UpdateRequest $request, TaskStatus $status): RedirectResponse
     {
-        $this->manager->updateStatus($request->input(), $id);
+        $this->statusManager->updateStatus($request->all(), $status);
         flash(__('Статус обновлен'))->success();
 
         return redirect()->route('statuses.index');
@@ -54,21 +72,17 @@ class StatusController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(TaskStatus $status): RedirectResponse
     {
-        $status = $this->manager->getStatus($id);
-
-        $response = Gate::inspect('status-delete', $status['status']);
-
-        if ($response->denied()) {
-            flash($response->message())->error();
+        if (!auth()->user() || $this->statusManager->isAssociated($status)) {
+            flash(__('Не удалось удалить статус'))->error();
             return redirect()->route('statuses.index');
         }
 
-        $this->manager->deleteStatus($id);
-        flash($response->message())->success();
+        $this->statusManager->deleteStatus($status);
+        flash(__('Статус удален'))->success();
 
         return redirect()->route('statuses.index');
     }

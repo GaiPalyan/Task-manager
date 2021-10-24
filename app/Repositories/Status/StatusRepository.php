@@ -4,6 +4,7 @@ namespace App\Repositories\Status;
 
 use App\Models\TaskStatus;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class StatusRepository implements StatusRepositoryInterface
 {
@@ -19,34 +20,38 @@ class StatusRepository implements StatusRepositoryInterface
         return compact('statuses');
     }
 
-    public function store(array $name, int $creatorId): void
+    public function store(array $name, Authenticatable $creator): void
     {
-        $user = User::findOrFail($creatorId);
+        $user = User::findOrFail($creator->getAuthIdentifier());
         $status = $user->statuses()->make($name);
-        $status->save();
-    }
-
-    public function getStatusById(int $id): array
-    {
-        $status = TaskStatus::findOrFail($id);
-        return compact('status');
-    }
-
-    public function update(array $data, int $id): void
-    {
-        $status = TaskStatus::findOrFail($id);
-        $status->fill($data);
         $status->save();
     }
 
     /**
      * @param int $id
+     * @return TaskStatus
+     */
+    public function getStatusById(int $id): TaskStatus
+    {
+        return TaskStatus::findOrFail($id);
+    }
+
+    /**
+     * @param array $data
+     * @param TaskStatus $status
+     */
+    public function update(array $data, TaskStatus $status): void
+    {
+        $status->fill($data);
+        $status->save();
+    }
+
+    /**
+     * @param TaskStatus $status
      * @return int|mixed|void
      */
-    public function delete(int $id)
+    public function delete(TaskStatus $status)
     {
-        $status = TaskStatus::findorFail($id);
-
         try {
             $status->delete();
         } catch (\Exception $exception) {

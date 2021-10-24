@@ -2,8 +2,11 @@
 
 namespace App\Domain;
 
+use App\Models\Task;
+use App\Models\TaskStatus;
 use App\Repositories\Status\StatusRepositoryInterface;
 use App\Repositories\Task\TaskRepositoryInterface;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class TaskManager
 {
@@ -19,20 +22,34 @@ class TaskManager
         $this->taskRepository = $taskRepository;
     }
 
-    public function getUniqueStatuses()
+    public function getUniqueStatuses(): array
     {
         return $this->statusRepository->getUniqueNamedList();
     }
 
-    public function getTaskList()
+    public function getTaskStatus(Task $task): TaskStatus
     {
-       // return $this->taskRepository->getList();
+        return $task->status()->get()->first();
     }
 
-    public function saveTask(array $data, int $creatorId)
+    public function getTaskList(): array
+    {
+        return $this->taskRepository->getList();
+    }
+
+    public function saveTask(array $data, Authenticatable $creator): void
     {
         $status = $this->statusRepository->getStatusById($data['status_id']);
-        $this->taskRepository->store($creatorId, $data, $status['status']);
+        $this->taskRepository->store($creator, $data, $status);
     }
 
+    public function updateTask(array $data, Task $task): void
+    {
+       $this->taskRepository->update($data, $task);
+    }
+
+    public function deleteTask(Task $task): void
+    {
+        $this->taskRepository->delete($task);
+    }
 }

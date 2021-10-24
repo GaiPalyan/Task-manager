@@ -2,12 +2,15 @@
 
 namespace App\Repositories\Status;
 
+use App\Models\TaskStatus;
+use Illuminate\Contracts\Auth\Authenticatable;
+
 interface StatusRepositoryInterface
 {
     public function getList(): array;
+    public function getStatusById(int $id): TaskStatus;
     public function getUniqueNamedList(): array;
-    public function store(array $data, int $creatorId): void;
-    public function getStatusById(int $id): array;
-    public function update(array $data, int $id): void;
-    public function delete(int $id);
+    public function store(array $data, Authenticatable $creator): void;
+    public function update(array $data, TaskStatus $status): void;
+    public function delete(TaskStatus $status);
 }
