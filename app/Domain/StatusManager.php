@@ -2,39 +2,46 @@
 
 namespace App\Domain;
 
+use App\Models\TaskStatus;
 use App\Repositories\Status\StatusRepositoryInterface;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class StatusManager
 {
-    private StatusRepositoryInterface $repository;
+    private StatusRepositoryInterface $statusRepository;
 
-    public function __construct(StatusRepositoryInterface $repository)
+    public function __construct(StatusRepositoryInterface $statusRepository)
     {
-        $this->repository = $repository;
+        $this->statusRepository = $statusRepository;
     }
 
     public function getStatusList()
     {
-        return $this->repository->getList();
+        return $this->statusRepository->getList();
     }
 
-    public function saveStatus(array $data, int $creatorId)
+    public function getStatus(int $id): TaskStatus
     {
-       $this->repository->store($data, $creatorId);
+        return $this->statusRepository->getStatusById($id);
     }
 
-    public function getStatus(int $statusId): array
+    public function saveStatus(array $data, Authenticatable $creator)
     {
-        return $this->repository->getItemById($statusId);
+       $this->statusRepository->store($data, $creator);
     }
 
-    public function updateStatus(array $data, int $id)
+    public function updateStatus(array $data, TaskStatus $status)
     {
-        $this->repository->update($data, $id);
+        $this->statusRepository->update($data, $status);
     }
 
-    public function deleteStatus(int $statusId)
+    public function deleteStatus(TaskStatus $status)
     {
-        $this->repository->delete($statusId);
+        $this->statusRepository->delete($status);
+    }
+
+    public function isAssociated(TaskStatus $status): bool
+    {
+        return $status->task()->exists();
     }
 }

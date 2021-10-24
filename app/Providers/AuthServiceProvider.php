@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -29,10 +30,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('status-delete', function (User $user, TaskStatus $status) {
-            if($user->id === $status->user_id) {
-                return Response::allow(__('Статус удален'));
-            }
-            return Response::deny(__('Не удалось удалить статус'));
+            return $user->getAuthIdentifier() === $status->getAttribute('user_id');
+        });
+
+        Gate::define('task-delete', function (User $user, Task $task) {
+            return $user->getAuthIdentifier() === $task->getAttribute('created_by_id');
         });
     }
 }
