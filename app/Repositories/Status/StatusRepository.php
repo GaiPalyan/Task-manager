@@ -10,7 +10,7 @@ class StatusRepository implements StatusRepositoryInterface
 {
     public function getList(): array
     {
-        $statuses = TaskStatus::statusesList()->paginate(10);
+        $statuses = TaskStatus::select('id', 'name', 'created_at')->orderByDesc('created_at')->paginate(10);
         return compact('statuses');
     }
 

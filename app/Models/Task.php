@@ -12,8 +12,8 @@ class Task extends Model
 
     protected $fillable = [
         'name', 'description',
-        'created_by_id', 'assigned_to_id',
-        'status_id'
+        'created_by_id', 'status_id',
+        'assigned_to_id'
     ];
 
     public function status()
@@ -31,10 +31,8 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeTaskList($query)
+    public function labels()
     {
-        return $query->join('task_statuses as statuses', 'tasks.status_id', '=', 'statuses.id')
-            ->join('users', 'tasks.created_by_id', '=', 'users.id')
-            ->selectRaw('tasks.*, statuses.name as status_name, users.name as creator_name');
+        return $this->belongsToMany(Label::class);
     }
 }

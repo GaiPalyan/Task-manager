@@ -71,7 +71,7 @@ class StatusController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param TaskStatus $status
      * @return RedirectResponse
      */
     public function destroy(TaskStatus $status): RedirectResponse

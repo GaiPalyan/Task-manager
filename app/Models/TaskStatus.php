@@ -11,11 +11,6 @@ class TaskStatus extends Model
 
     protected $fillable = ['name'];
 
-    public function scopeStatusesList($query)
-    {
-        return $query->select('id', 'name', 'created_at')->orderByDesc('created_at');
-    }
-
     public function creator()
     {
         return $this->belongsTo(User::class);

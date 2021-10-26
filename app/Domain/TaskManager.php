@@ -29,7 +29,7 @@ class TaskManager
 
     public function getTaskStatus(Task $task): TaskStatus
     {
-        return $task->status()->get()->first();
+        return $this->statusRepository->getStatusById($task->status_id);
     }
 
     public function getTaskList(): array

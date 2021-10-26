@@ -14,13 +14,16 @@ class TaskController extends Controller
 {
     public TaskManager $taskManager;
 
+    /**
+     * @param TaskManager $taskManager
+     */
     public function __construct(TaskManager $taskManager)
     {
         $this->taskManager = $taskManager;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the tasks.
      *
      * @return View
      */
@@ -31,7 +34,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new tasks.
      *
      * @return View|RedirectResponse
      */
@@ -45,7 +48,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created tasks in storage.
      *
      * @param StoreRequest $request
      * @return RedirectResponse
@@ -53,13 +56,13 @@ class TaskController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->taskManager->saveTask($request->all(), auth()->user());
-        flash(__('Задача успешно создана '))->success();
+        flash(__('Задача успешно создана'))->success();
 
         return redirect()->route('tasks.index');
     }
 
     /**
-     * Display the specified resource.
+     * Display the tasks.
      *
      * @param Task $task
      * @return View
@@ -71,20 +74,20 @@ class TaskController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the tasks.
      *
      * @param Task $task
      * @return View
      */
     public function edit(Task $task): View
     {
-        $availableStatuses = $this->taskManager->getUniqueStatuses();
+        $statuses = $this->taskManager->getUniqueStatuses();
         $status = $this->taskManager->getTaskStatus($task);
-        return view('app.tasks.edit', $availableStatuses, compact('task', 'status'));
+        return view('app.tasks.edit', $statuses, compact('task', 'status'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the tasks in storage.
      *
      * @param UpdateRequest $request
      * @param Task $task
@@ -98,9 +101,10 @@ class TaskController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the tasks from storage.
      *
      * @param Task $task
+     * @param Gate $response
      * @return RedirectResponse
      */
     public function destroy(Task $task, Gate $response): RedirectResponse
