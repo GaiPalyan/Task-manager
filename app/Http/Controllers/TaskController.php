@@ -28,8 +28,13 @@ class TaskController extends Controller
      */
     public function index(): View
     {
-       $tasks = $this->taskManager->getTaskList();
-       return view('app.tasks.show', $tasks);
+        $availableOptions = array_merge(
+            $this->taskManager->getUniqueStatuses(),
+            $this->taskManager->getUniqueLabels()
+        );
+        $this->taskManager->getCreatorsList();
+        $tasks = $this->taskManager->getTaskList();
+       return view('app.tasks.show', compact('tasks', 'availableOptions'));
     }
 
     /**

@@ -97,10 +97,10 @@ class LabelTest extends TestCase
         $this->assertDeleted($label);
     }
 
-    /*public function test_delete_label_attached_with_the_task()
+    public function test_delete_label_attached_with_the_task()
     {
-        $label = make(Label::class)->create();
-        $task = make(Task::class)->create();
+        $label = make(Label::class)
+             ->hasAttached(Task::factory()->count(1))->create();
 
         $this->actingAs($this->user);
         $this->delete(route('labels.destroy', $label))
@@ -110,6 +110,6 @@ class LabelTest extends TestCase
              ->assertSeeText('Не удалось удалить метку');
 
         $this->assertDatabaseHas('labels', $label->only('id'));
-    }*/
+    }
 
 }

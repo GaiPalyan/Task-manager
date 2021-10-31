@@ -8,6 +8,7 @@ use App\Repositories\Label\LabelRepositoryInterface;
 use App\Repositories\Status\StatusRepositoryInterface;
 use App\Repositories\Task\TaskRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskManager
 {
@@ -25,6 +26,11 @@ class TaskManager
         $this->labelRepository = $labelRepository;
     }
 
+    public function getCreatorsList()
+    {
+        return $this->taskRepository->getCreators();
+    }
+
     public function getUniqueStatuses(): array
     {
         return $this->statusRepository->getUniqueNamedList();
@@ -40,7 +46,7 @@ class TaskManager
         return $this->statusRepository->getStatusById($task->status_id);
     }
 
-    public function getTaskList(): array
+    public function getTaskList(): LengthAwarePaginator
     {
         return $this->taskRepository->getList();
     }
