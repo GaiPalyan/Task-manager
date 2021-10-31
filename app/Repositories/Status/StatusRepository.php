@@ -20,11 +20,9 @@ class StatusRepository implements StatusRepositoryInterface
         return compact('statuses');
     }
 
-    public function store(array $name, Authenticatable $creator): void
+    public function store(array $name): void
     {
-        $user = User::findOrFail($creator->getAuthIdentifier());
-        $status = $user->statuses()->make($name);
-        $status->save();
+        TaskStatus::create($name);
     }
 
     /**

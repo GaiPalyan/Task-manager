@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TaskLable extends Migration
+class LabelTaskTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class TaskLable extends Migration
      */
     public function up()
     {
-        Schema::create('task_label', function (Blueprint $table) {
+        Schema::create('label_task', function (Blueprint $table) {
             $table->unsignedInteger('task_id');
             $table->unsignedInteger('label_id');
-            $table->foreign('task_id')->references('id')->on('tasks');
-            $table->foreign('label_id')->references('id')->on('labels');
+            $table->foreign('task_id')->references('id')->on('tasks')->cascadeOnDelete();
+            $table->foreign('label_id')->references('id')->on('labels')->cascadeOnDelete();
+            $table->unique(['task_id', 'label_id']);
+            $table->timestamps();
         });
     }
 
@@ -28,6 +30,6 @@ class TaskLable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_label');
+        Schema::dropIfExists('label_task');
     }
 }

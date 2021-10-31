@@ -2,82 +2,113 @@
 
 namespace Tests\Feature;
 
+use App\Models\Task;
 use App\Models\TaskStatus;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 
 class TaskStatusTest extends TestCase
 {
-    protected Model $user;
-    protected Model $status;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create();
-        $this->status = TaskStatus::factory()->create();
     }
 
-    public function testIndex()
+    /* ------ Tests actions as guest ------ */
+    public function test_index()
     {
         $response = $this->get(route('statuses.index'));
         $response->assertOk();
         $response->assertSessionHasNoErrors();
     }
 
-    public function testStatusCreateWithoutLogIn()
+    public function test_status_create_as_guest()
     {
         $response = $this->get(route('statuses.create'));
-        $response->assertRedirect(route('statuses.index'));
+        $response->assertStatus(403);
     }
 
-    public function testStatusCreateWithLogIn()
+    public function test_store_as_guest()
     {
-        $response = $this->post('/login', [
-            'email' => $this->user->email,
-            'password' => 'password'
-        ]);
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('verification.notice'));
-
-        $response = $this->get(route('statuses.index'));
-        $response->assertSeeText(__('Create Status'));
-        $response = $this->get(route('statuses.create'));
-        $response->assertSessionHasNoErrors();
-        $response->assertOk();
+        $status = make(TaskStatus::class)->make()->toArray();
+        $this->post(route('statuses.store', $status))
+            ->assertStatus(403);
+        $this->assertDatabaseMissing('task_statuses', $status);
     }
 
-    public function testStore()
+    public function test_update_as_guest()
     {
-        $response = $this->post('/login', [
-            'email' => $this->user->email,
-            'password' => 'password'
-        ]);
+        $status = make(TaskStatus::class)->create();
+        $this->get(route('statuses.edit', $status))
+             ->assertStatus(403);
+        $this->patch(route('statuses.update', $status), ['name' => 'new name'])
+             ->assertStatus(403);
+        $this->assertDatabaseMissing('task_statuses', ['name' => 'new name']);
+    }
 
+    public function test_delete_as_guest()
+    {
+        $status = make(TaskStatus::class)->create();
+        $this->delete(route('statuses.destroy', $status))
+             ->assertStatus(403);
+        $this->assertDatabaseHas('task_statuses', $status->only('id'));
+    }
+
+    /* ------ Test actions as user ------- */
+
+    public function test_store_as_user()
+    {
         $status = ['name' => 'New Status'];
-        $response = $this->post(route('statuses.store'), $status);
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
+        $this->actingAs($this->user)
+             ->post(route('statuses.store'), $status)
+             ->assertSessionHasNoErrors()
+             ->assertRedirect();
         $this->assertDatabaseHas('task_statuses', $status);
+
+        $this->get(route('statuses.index'))
+            ->assertSeeText('Статус успешно создан');
     }
 
-    public function testUpdate()
+    public function test_update_as_user()
     {
-        $response = $this->post('/login', [
-            'email' => $this->user->email,
-            'password' => 'password'
-        ]);
+        $newName = ['name' => 'Updated'];
+        $status = make(TaskStatus::class)->create();
+        $this->actingAs($this->user)
+             ->patch(route('statuses.update', $status), $newName)
+             ->assertRedirect(route('statuses.index'))
+             ->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('task_statuses', $newName);
 
-        $newName = 'Updated';
-        $existStatus = TaskStatus::findorFail($this->status->id);
-        $response = $this->patch(route('statuses.update', $existStatus->id), ['name' => $newName]);
-        $response->assertRedirect(route('statuses.index'));
-        $response->assertSessionHasNoErrors();
-        $this->assertDatabaseHas('task_statuses', ['name' => $newName]);
+        $this->get(route('statuses.index'))
+             ->assertSeeText('Статус успешно обновлен');
+    }
 
-        $response = $this->get(route('statuses.index'));
-        $response->assertSeeText('Статус обновлен');
+    public function test_delete_status_as_user()
+    {
+        $status = make(TaskStatus::class)->create();
+        $this->actingAs($this->user)
+             ->delete(route('statuses.update', $status))
+             ->assertSessionHasNoErrors()
+             ->assertRedirect(route('statuses.index'));
+
+        $this->get(route('statuses.index'))
+             ->assertSeeText('Статус успешно удалён');
+
+        $this->assertDeleted($status);
+    }
+
+    public function test_delete_status_associated_with_the_task()
+    {
+        $status = make(TaskStatus::class);
+        Task::factory()->for($status->create(), 'status')->create();
+
+        $this->actingAs($this->user);
+        $this->delete(route('statuses.destroy', $status))
+            ->assertRedirect();
+
+        $this->get(route('statuses.index'))
+            ->assertSeeText('Не удалось удалить статус');
+
+        $this->assertDatabaseHas('task_statuses', $status->only('id'));
     }
 }
 

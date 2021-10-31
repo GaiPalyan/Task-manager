@@ -7,19 +7,18 @@ use App\Http\Requests\TaskRequests\StoreRequest;
 use App\Http\Requests\TaskRequests\UpdateRequest;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class TaskController extends Controller
 {
     public TaskManager $taskManager;
-
     /**
      * @param TaskManager $taskManager
      */
     public function __construct(TaskManager $taskManager)
     {
         $this->taskManager = $taskManager;
+        $this->authorizeResource(Task::class, 'task');
     }
 
     /**
@@ -40,11 +39,12 @@ class TaskController extends Controller
      */
     public function create(): View | RedirectResponse
     {
-        $availableStatuses = $this->taskManager->getUniqueStatuses();
+        $availableOptions = array_merge(
+            $this->taskManager->getUniqueStatuses(),
+            $this->taskManager->getUniqueLabels()
+        );
 
-        return auth()->user()
-                    ? view('app.tasks.create', $availableStatuses)
-                    : redirect()->route('tasks.index');
+        return view('app.tasks.create', compact('availableOptions'));
     }
 
     /**
@@ -77,13 +77,17 @@ class TaskController extends Controller
      * Show the form for editing the tasks.
      *
      * @param Task $task
-     * @return View
+     * @return View | RedirectResponse
      */
-    public function edit(Task $task): View
+    public function edit(Task $task): View | RedirectResponse
     {
-        $statuses = $this->taskManager->getUniqueStatuses();
-        $status = $this->taskManager->getTaskStatus($task);
-        return view('app.tasks.edit', $statuses, compact('task', 'status'));
+        $availableOptions = array_merge(
+            $this->taskManager->getUniqueStatuses(),
+            $this->taskManager->getUniqueLabels(),
+            $this->taskManager->getTaskStatus($task)->toArray()
+        );
+
+        return view('app.tasks.edit', compact('task', 'availableOptions'));
     }
 
     /**
@@ -104,16 +108,10 @@ class TaskController extends Controller
      * Remove the tasks from storage.
      *
      * @param Task $task
-     * @param Gate $response
      * @return RedirectResponse
      */
-    public function destroy(Task $task, Gate $response): RedirectResponse
+    public function destroy(Task $task): RedirectResponse
     {
-        if (!$response::inspect('task-delete', $task)->allowed()) {
-            flash(__('Не удалось удалить задачу'))->error();
-            return redirect()->route('tasks.index');
-        }
-
         $this->taskManager->deleteTask($task);
         flash(__('Задача успешно удалена'))->success();
         return redirect()->route('tasks.index');

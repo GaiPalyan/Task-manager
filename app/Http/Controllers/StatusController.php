@@ -12,9 +12,14 @@ use Illuminate\View\View;
 class StatusController extends Controller
 {
     public StatusManager $statusManager;
+
+    /**
+     * @param StatusManager $statusManager
+     */
     public function __construct(StatusManager $statusManager)
     {
         $this->statusManager = $statusManager;
+        $this->authorizeResource(TaskStatus::class, 'status');
     }
 
     /**
@@ -26,14 +31,13 @@ class StatusController extends Controller
         return view('app.statuses.show', $statuses);
     }
 
+
     /**
-     * @return View|RedirectResponse
+     * @return View
      */
-    public function create(): View | RedirectResponse
+    public function create()
     {
-        return auth()->user()
-                ? view('app.statuses.create')
-                : redirect()->route('statuses.index');
+        return view('app.statuses.create');
     }
 
     /**
@@ -42,19 +46,19 @@ class StatusController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        $this->statusManager->saveStatus($request->all(), auth()->user());
-        flash(__('Статус создан'))->success();
+        $this->statusManager->saveStatus($request->all());
+        flash(__('Статус успешно создан'))->success();
 
         return redirect()->route('statuses.index');
     }
 
     /**
      * @param TaskStatus $status
-     * @return View
+     * @return View | RedirectResponse
      */
-    public function edit(TaskStatus $status): View
+    public function edit(TaskStatus $status): View | RedirectResponse
     {
-        return view('app.statuses.edit', compact('status'));
+        return  view('app.statuses.edit', compact('status'));
     }
 
     /**
@@ -65,7 +69,7 @@ class StatusController extends Controller
     public function update(UpdateRequest $request, TaskStatus $status): RedirectResponse
     {
         $this->statusManager->updateStatus($request->all(), $status);
-        flash(__('Статус обновлен'))->success();
+        flash(__('Статус успешно обновлен'))->success();
 
         return redirect()->route('statuses.index');
     }
@@ -76,13 +80,13 @@ class StatusController extends Controller
      */
     public function destroy(TaskStatus $status): RedirectResponse
     {
-        if (!auth()->user() || $this->statusManager->isAssociated($status)) {
+        if ($this->statusManager->isAssociated($status)) {
             flash(__('Не удалось удалить статус'))->error();
             return redirect()->route('statuses.index');
         }
 
         $this->statusManager->deleteStatus($status);
-        flash(__('Статус удален'))->success();
+        flash(__('Статус успешно удалён'))->success();
 
         return redirect()->route('statuses.index');
     }

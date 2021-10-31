@@ -33,7 +33,7 @@
                                 <a class="nav-link" href="{{route('statuses.index')}}">{{__('Statuses')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="">{{__('Labels')}}</a>
+                                <a class="nav-link" href="{{route('labels.index')}}">{{__('Label')}}</a>
                             </li>
                         </ul>
                     </ul>

@@ -7,135 +7,111 @@ use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\WithFaker;
-use PHPUnit\Util\Exception;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
 {
     use WithFaker;
 
-    public function testIndex()
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
+
+    /* ----------- Tests actions as guest --------------- */
+
+    public function test_index(): void
     {
         $response = $this->get(route('tasks.index'));
         $response->assertOk();
         $response->assertSessionHasNoErrors();
     }
 
-    public function testEditPage()
-    {
-        $existTask = $this->make('task')->create();
-
-        $response = $this->get(route('tasks.edit', $existTask));
-        $response->assertOk();
-        $response->assertSessionHasNoErrors();
-        $response->assertSeeText("Update task");
-    }
-
-    public function testTaskCreateWithoutLogIn()
+    public function test_create_as_guest(): void
     {
         $response = $this->get(route('tasks.create'));
-        $response->assertRedirect(route('tasks.index'));
+        $response->assertStatus(403);
     }
 
-    public function testTaskCreateWithLogIn()
+    public function test_store_as_guest(): void
     {
-        $this->getLoggedUser();
-        $this->assertAuthenticated();
-
-        $response = $this->get(route('tasks.index'));
-        $response->assertSeeText(__('Create task'));
-        $response = $this->get(route('tasks.create'));
-        $response->assertSessionHasNoErrors();
-        $response->assertOk();
+        $task = make(Task::class)->make()->toArray();
+        $this->get(route('tasks.create'))
+             ->assertStatus(403);
+        $this->post(route('tasks.store', $task))
+             ->assertStatus(403);
+        $this->assertDatabaseMissing('tasks', $task);
     }
 
-    public function testStore()
+    public function test_update_as_guest(): void
     {
-        $user = $this->getLoggedUser();
-        $this->assertAuthenticated();
-
-        $task = [
-            'name' => $this->faker->title,
-            'description' => $this->faker->text,
-            'status_id' => $this->make('status')->getAttribute('id'),
-            'created_by_id' => $user->id,
-            'assigned_to_id' => null
-        ];
-
-        $response = $this->post(route('tasks.store'), $task);
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('tasks.index'));
-        $this->assertDatabaseHas('tasks', ['name' => $task['name']]);
+        $task = make(Task::class)->create();
+        $this->get(route('tasks.edit', $task))
+            ->assertStatus(403);
+        $this->patch(route('tasks.update', $task), ['name' => 'new name'])
+            ->assertStatus(403);
+        $this->assertDatabaseMissing('tasks', ['name' => 'new name']);
     }
 
-    public function testUpdate()
+    public function test_delete_as_guest(): void
     {
-        $this->getLoggedUser();
-        $this->assertAuthenticated();
+        $task = make(Task::class)->create();
+        $this->delete(route('tasks.destroy', $task))
+            ->assertStatus(403);
+        $this->assertModelExists($task);
+    }
 
-        $newData = [
-          'name' => 'New Name',
-          'description' => $this->faker->text,
-          'status_id' => $this->make('status')->getAttribute('id')
-        ];
-        $this->make('task')->create();
+/* ---------- test actions as user ------------------ */
 
-        $response = $this->patch(route('tasks.update', Task::first()), $newData);
-        $response->assertRedirect(route('tasks.index'));
-        $response->assertSessionHasNoErrors();
+    public function test_create_as_user(): void
+    {
+        $this->actingAs($this->user)
+             ->get(route('tasks.create'))
+             ->assertOk();
+    }
+
+    public function test_store_as_user()
+    {
+        $task = make(Task::class)->make([
+                'status_id' => make(TaskStatus::class)->create()->getAttribute('id'),
+                'created_by_id' => $this->user->id,
+            ])->toArray();
+
+        $this->actingAs($this->user)
+             ->post(route('tasks.store', $task))
+             ->assertSessionHasNoErrors()
+             ->assertRedirect(route('tasks.index'));
+        $this->assertDatabaseHas('tasks', $task);
+
+    }
+
+    public function test_update_as_user()
+    {
+        $newData = make(Task::class)->make([
+            'status_id' => make(TaskStatus::class)->create()->getAttribute('id')
+        ])->toArray();
+        $task = make(Task::class)->create();
+
+        $this->actingAs($this->user)->patch(route('tasks.update', $task), $newData)
+            ->assertRedirect(route('tasks.index'))
+            ->assertSessionHasNoErrors();
         $this->assertDatabaseHas('tasks', $newData);
-        $response = $this->get(route('tasks.index'));
-        $response->assertSeeText('Задача успешно изменена');
+        $this->actingAs($this->user)->get(route('tasks.index'))
+            ->assertSeeText('Задача успешно изменена');
     }
 
-    /*public function testDelete()
+   /*public function test_delete_user_task()
     {
-        $user = $this->getLoggedUser();
-        $this->assertAuthenticated();
-
-        $task = $this->make('task')->create([
-            'name' => $this->faker->title,
-            'description' => $this->faker->text,
-            'status_id' => $this->make('status')->getAttribute('id'),
-            'created_by_id' => $user->id,
-            'assigned_to_id' => null
+        $task = make(Task::class)->create([
+            'created_by_id' => $this->user,
         ]);
-        //dd($user->getAuthIdentifier() === $task->getAttribute('created_by_id'));
 
-        $response = $this->delete(route('tasks.destroy', $task));
-        $response->assertRedirect();
-        $this->assertDatabaseMissing('tasks', ['name' => $task->name]);
+        $this->assertDatabaseHas('tasks', ['name' => $task->name]);
+        $this->actingAs($this->user)
+             ->assertAuthenticatedAs($this->user)
+             ->delete(route('tasks.destroy', $task))
+             ->assertRedirect();
 
+        $this->assertDeleted($task);
     }*/
-
-    /**
-     * @param $subject
-     * @return \Illuminate\Database\Eloquent\Collection|Model
-     */
-    protected function make($subject)
-    {
-        return match (strtolower($subject)) {
-            'user' => User::factory()->create(),
-            'status' => TaskStatus::factory()->create(),
-            'task' => Task::factory(),
-            default => throw new Exception('Wrong subject'),
-        };
-    }
-
-    protected function loginUser(Model $user): bool
-    {
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-        return $response->getStatusCode() === 302;
-    }
-
-    protected function getLoggedUser()
-    {
-        $user = $this->make('user');
-        $this->loginUser($user);
-        return $user;
-    }
-
 }

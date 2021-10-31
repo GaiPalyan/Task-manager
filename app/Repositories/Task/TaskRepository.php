@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\DB;
 
 class TaskRepository implements TaskRepositoryInterface
 {
@@ -27,6 +28,9 @@ class TaskRepository implements TaskRepositoryInterface
             ->associate($status);
 
         $task->save();
+        if (isset($data['labels'])) {
+            $task->labels()->attach($data['labels']);
+        }
     }
 
     public function update(array $data, Task $task): void

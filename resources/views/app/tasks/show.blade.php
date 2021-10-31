@@ -16,6 +16,7 @@
                 <th>{{__('Автор')}}</th>
                 <th>{{__('Исполнитель')}}</th>
                 <th>{{__('Дата создания')}}</th>
+                <th>{{__('Действия')}}</th>
             </tr>
         </thead>
         <tbody>
@@ -28,17 +29,17 @@
                     <td>{{$task->assignet_to}}</td>
                     <td>{{$task->created_at}}</td>
                     <td>
-                        @if(auth()->user())
-                            @if(auth()->id() === $task->created_by_id)
-                            <a class="btn btn-danger btn-sm"
+                        @can('update', $task)
+                            @can('delete', $task)
+                            <a class="btn btn-danger btn-sm ml-2"
                                data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('tasks.destroy', $task) }}">
                                 {{__('delete')}}
                             </a>
-                            @endif
-                            <a class="btn btn-success btn-sm" href="{{ route('tasks.edit', $task) }}">
+                            @endcan
+                            <a class="btn btn-success btn-sm float-left" href="{{ route('tasks.edit', $task) }}">
                                 {{__('edit')}}
                             </a>
-                        @endif
+                        @endcan
                     </td>
                 </tr>
             @endforeach

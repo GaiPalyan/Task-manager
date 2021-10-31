@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LabelController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('main');
+Route::get('/', [HomeController::class, 'index'])->name('main');
 
 /**
  * Authenticate & authorization routs group
@@ -35,4 +34,9 @@ Route::resource('statuses', StatusController::class);
  * Tasks routs group
  */
 Route::resource('tasks', TaskController::class);
+
+/**
+ * Label routs group
+ */
+Route::resource('labels', LabelController::class);
 

@@ -15,7 +15,7 @@ class StatusManager
         $this->statusRepository = $statusRepository;
     }
 
-    public function getStatusList()
+    public function getStatusList(): array
     {
         return $this->statusRepository->getList();
     }
@@ -25,17 +25,17 @@ class StatusManager
         return $this->statusRepository->getStatusById($id);
     }
 
-    public function saveStatus(array $data, Authenticatable $creator)
+    public function saveStatus(array $data): void
     {
-       $this->statusRepository->store($data, $creator);
+       $this->statusRepository->store($data);
     }
 
-    public function updateStatus(array $data, TaskStatus $status)
+    public function updateStatus(array $data, TaskStatus $status): void
     {
         $this->statusRepository->update($data, $status);
     }
 
-    public function deleteStatus(TaskStatus $status)
+    public function deleteStatus(TaskStatus $status): void
     {
         $this->statusRepository->delete($status);
     }
