@@ -23,7 +23,7 @@ class TaskRepository implements TaskRepositoryInterface
     public function getCreators()
     {
         return Task::join('users', 'tasks.created_by_id', '=', 'users.id')
-            ->selectRaw('users.*, users.id as users')
+            ->selectRaw('users.*')
             ->get();
     }
 

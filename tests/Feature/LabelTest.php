@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Label;
 use App\Models\Task;
-use App\Models\TaskStatus;
 use Tests\TestCase;
 
 class LabelTest extends TestCase

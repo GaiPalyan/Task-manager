@@ -113,9 +113,9 @@ class TaskController extends Controller
      * Remove the tasks from storage.
      *
      * @param Task $task
-     * @return RedirectResponse
+
      */
-    public function destroy(Task $task): RedirectResponse
+    public function destroy(Task $task)
     {
         $this->taskManager->deleteTask($task);
         flash(__('Задача успешно удалена'))->success();

@@ -98,8 +98,9 @@ class TaskStatusTest extends TestCase
 
     public function test_delete_status_associated_with_the_task()
     {
-        $status = make(TaskStatus::class);
-        Task::factory()->for($status->create(), 'status')->create();
+        $status = TaskStatus::factory()
+            ->has(Task::factory()->state(['name' => 'New task']), 'task')
+            ->create();
 
         $this->actingAs($this->user);
         $this->delete(route('statuses.destroy', $status))

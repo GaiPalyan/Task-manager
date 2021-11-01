@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
@@ -93,19 +92,18 @@ class TaskTest extends TestCase
         $task = make(Task::class)->create();
 
         $this->actingAs($this->user)->patch(route('tasks.update', $task), $newData)
-            ->assertRedirect(route('tasks.index'))
-            ->assertSessionHasNoErrors();
+             ->assertRedirect(route('tasks.index'))
+             ->assertSessionHasNoErrors();
         $this->assertDatabaseHas('tasks', $newData);
         $this->actingAs($this->user)->get(route('tasks.index'))
-            ->assertSeeText('Задача успешно изменена');
+             ->assertSeeText('Задача успешно изменена');
     }
 
-   /*public function test_delete_user_task()
+   public function test_delete_user_task()
     {
         $task = make(Task::class)->create([
-            'created_by_id' => $this->user,
+            'created_by_id' => $this->user->id
         ]);
-
         $this->assertDatabaseHas('tasks', ['name' => $task->name]);
         $this->actingAs($this->user)
              ->assertAuthenticatedAs($this->user)
@@ -113,5 +111,17 @@ class TaskTest extends TestCase
              ->assertRedirect();
 
         $this->assertDeleted($task);
-    }*/
+    }
+
+    public function test_delete_not_user_task()
+    {
+        $task = make(Task::class)->create();
+        $this->assertDatabaseHas('tasks', ['name' => $task->name]);
+        $this->actingAs($this->user)
+            ->assertAuthenticatedAs($this->user)
+            ->delete(route('tasks.destroy', $task))
+            ->assertStatus(403);
+
+        $this->assertDatabaseHas('tasks', ['name' => $task->name]);
+    }
 }
