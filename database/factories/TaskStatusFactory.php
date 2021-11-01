@@ -26,7 +26,6 @@ class TaskStatusFactory extends Factory
     {
         return [
             'name' => Arr::random(['новый', ' в работе', 'на тестировании', 'завершен']),
-            'user_id' => User::factory(),
         ];
     }
 }

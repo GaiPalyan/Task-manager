@@ -7,45 +7,53 @@ use App\Http\Requests\TaskRequests\StoreRequest;
 use App\Http\Requests\TaskRequests\UpdateRequest;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class TaskController extends Controller
 {
     public TaskManager $taskManager;
-
+    /**
+     * @param TaskManager $taskManager
+     */
     public function __construct(TaskManager $taskManager)
     {
         $this->taskManager = $taskManager;
+        $this->authorizeResource(Task::class, 'task');
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the tasks.
      *
      * @return View
      */
     public function index(): View
     {
-       $tasks = $this->taskManager->getTaskList();
-       return view('app.tasks.show', $tasks);
+        $availableOptions = array_merge(
+            $this->taskManager->getUniqueStatuses(),
+            $this->taskManager->getUniqueLabels()
+        );
+        $this->taskManager->getCreatorsList();
+        $tasks = $this->taskManager->getTaskList();
+       return view('app.tasks.show', compact('tasks', 'availableOptions'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new tasks.
      *
      * @return View|RedirectResponse
      */
     public function create(): View | RedirectResponse
     {
-        $availableStatuses = $this->taskManager->getUniqueStatuses();
+        $availableOptions = array_merge(
+            $this->taskManager->getUniqueStatuses(),
+            $this->taskManager->getUniqueLabels()
+        );
 
-        return auth()->user()
-                    ? view('app.tasks.create', $availableStatuses)
-                    : redirect()->route('tasks.index');
+        return view('app.tasks.create', compact('availableOptions'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created tasks in storage.
      *
      * @param StoreRequest $request
      * @return RedirectResponse
@@ -53,13 +61,13 @@ class TaskController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->taskManager->saveTask($request->all(), auth()->user());
-        flash(__('Задача успешно создана '))->success();
+        flash(__('Задача успешно создана'))->success();
 
         return redirect()->route('tasks.index');
     }
 
     /**
-     * Display the specified resource.
+     * Display the tasks.
      *
      * @param Task $task
      * @return View
@@ -71,20 +79,24 @@ class TaskController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the tasks.
      *
      * @param Task $task
-     * @return View
+     * @return View | RedirectResponse
      */
-    public function edit(Task $task): View
+    public function edit(Task $task): View | RedirectResponse
     {
-        $availableStatuses = $this->taskManager->getUniqueStatuses();
-        $status = $this->taskManager->getTaskStatus($task);
-        return view('app.tasks.edit', $availableStatuses, compact('task', 'status'));
+        $availableOptions = array_merge(
+            $this->taskManager->getUniqueStatuses(),
+            $this->taskManager->getUniqueLabels(),
+            $this->taskManager->getTaskStatus($task)->toArray()
+        );
+
+        return view('app.tasks.edit', compact('task', 'availableOptions'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the tasks in storage.
      *
      * @param UpdateRequest $request
      * @param Task $task
@@ -98,18 +110,13 @@ class TaskController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the tasks from storage.
      *
      * @param Task $task
-     * @return RedirectResponse
-     */
-    public function destroy(Task $task, Gate $response): RedirectResponse
-    {
-        if (!$response::inspect('task-delete', $task)->allowed()) {
-            flash(__('Не удалось удалить задачу'))->error();
-            return redirect()->route('tasks.index');
-        }
 
+     */
+    public function destroy(Task $task)
+    {
         $this->taskManager->deleteTask($task);
         flash(__('Задача успешно удалена'))->success();
         return redirect()->route('tasks.index');

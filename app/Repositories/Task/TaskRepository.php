@@ -6,14 +6,25 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 
 class TaskRepository implements TaskRepositoryInterface
 {
 
-    public function getList(): array
+    public function getList(): LengthAwarePaginator
     {
-        $tasks = Task::taskList()->paginate(10);
-        return compact('tasks');
+        return Task::join('task_statuses as statuses', 'tasks.status_id', '=', 'statuses.id')
+            ->join('users', 'tasks.created_by_id', '=', 'users.id')
+            ->selectRaw('tasks.*, statuses.name as status_name, users.name as creator_name')->paginate(10);
+    }
+
+    public function getCreators()
+    {
+        return Task::join('users', 'tasks.created_by_id', '=', 'users.id')
+            ->selectRaw('users.*')
+            ->get();
     }
 
     public function store(Authenticatable $creator, array $data, TaskStatus $status): void
@@ -25,6 +36,9 @@ class TaskRepository implements TaskRepositoryInterface
             ->associate($status);
 
         $task->save();
+        if (isset($data['labels'])) {
+            $task->labels()->attach($data['labels']);
+        }
     }
 
     public function update(array $data, Task $task): void

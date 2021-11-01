@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TaskStatus extends Model
 {
@@ -11,17 +13,12 @@ class TaskStatus extends Model
 
     protected $fillable = ['name'];
 
-    public function scopeStatusesList($query)
-    {
-        return $query->select('id', 'name', 'created_at')->orderByDesc('created_at');
-    }
-
-    public function creator()
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function task()
+    public function task(): HasMany
     {
         return $this->hasMany(Task::class, 'status_id');
     }

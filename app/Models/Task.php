@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
 class Task extends Model
@@ -12,29 +14,32 @@ class Task extends Model
 
     protected $fillable = [
         'name', 'description',
-        'created_by_id', 'assigned_to_id',
-        'status_id'
+        'created_by_id', 'status_id',
+        'assigned_to_id'
     ];
 
-    public function status()
+    public function status(): BelongsTo
     {
         return $this->belongsTo(TaskStatus::class);
     }
 
-    public function creator()
+    public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id');
     }
 
-    public function assign()
+    public function assign(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id');
     }
 
-    public function scopeTaskList($query)
+    public function labels(): BelongsToMany
     {
-        return $query->join('task_statuses as statuses', 'tasks.status_id', '=', 'statuses.id')
-            ->join('users', 'tasks.created_by_id', '=', 'users.id')
-            ->selectRaw('tasks.*, statuses.name as status_name, users.name as creator_name');
+        return $this->belongsToMany(
+            Label::class,
+            'label_task',
+            'task_id',
+            'label_id')
+            ->withTimestamps();
     }
 }

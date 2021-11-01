@@ -24,10 +24,10 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'name' => $this->faker->word,
             'description' => $this->faker->text,
             'status_id' => TaskStatus::factory(),
-            'created_by_id' => User::factory()
+            'created_by_id' => User::factory(),
         ];
     }
 }
