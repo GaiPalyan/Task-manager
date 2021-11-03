@@ -25,7 +25,7 @@ class TaskStatusFactory extends Factory
     public function definition()
     {
         return [
-            'name' => Arr::random(['новый', ' в работе', 'на тестировании', 'завершен']),
+            'name' => $this->faker->word
         ];
     }
 }

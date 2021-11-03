@@ -28,11 +28,7 @@ class TaskController extends Controller
      */
     public function index(): View
     {
-        $availableOptions = array_merge(
-            $this->taskManager->getUniqueStatuses(),
-            $this->taskManager->getUniqueLabels()
-        );
-        $this->taskManager->getCreatorsList();
+        $availableOptions = $this->taskManager->getFilterOptions();
         $tasks = $this->taskManager->getTaskList();
        return view('app.tasks.show', compact('tasks', 'availableOptions'));
     }
@@ -44,12 +40,8 @@ class TaskController extends Controller
      */
     public function create(): View | RedirectResponse
     {
-        $availableOptions = array_merge(
-            $this->taskManager->getUniqueStatuses(),
-            $this->taskManager->getUniqueLabels()
-        );
-
-        return view('app.tasks.create', compact('availableOptions'));
+        $creatingOptions = $this->taskManager->getCreatingOptions();
+        return view('app.tasks.create', compact('creatingOptions'));
     }
 
     /**
@@ -74,8 +66,8 @@ class TaskController extends Controller
      */
     public function show(Task $task): View
     {
-        $status = $this->taskManager->getTaskStatus($task);
-        return view('app.tasks.task_page', compact('task', 'status'));
+        $taskData = $this->taskManager->getTaskRelatedData($task);
+        return view('app.tasks.task_page', compact('task', 'taskData'));
     }
 
     /**
@@ -87,9 +79,8 @@ class TaskController extends Controller
     public function edit(Task $task): View | RedirectResponse
     {
         $availableOptions = array_merge(
-            $this->taskManager->getUniqueStatuses(),
-            $this->taskManager->getUniqueLabels(),
-            $this->taskManager->getTaskStatus($task)->toArray()
+            $this->taskManager->getUpdatingOptions($task),
+            $this->taskManager->getTaskRelatedData($task)
         );
 
         return view('app.tasks.edit', compact('task', 'availableOptions'));

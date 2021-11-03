@@ -19,22 +19,22 @@ class LabelsManager
         return $this->labelsRepository->getList();
     }
 
-    public function saveLabel(array $data)
+    public function saveLabel(array $data): void
     {
         $this->labelsRepository->store($data);
     }
 
-    public function updateLabel(array $data, Label $label)
+    public function updateLabel(array $data, Label $label): void
     {
         $this->labelsRepository->update($data, $label);
     }
 
-    public function deleteLabel(Label $label)
+    public function deleteLabel(Label $label): void
     {
         $this->labelsRepository->delete($label);
     }
 
-    public function isAttached(Label $label)
+    public function isAttached(Label $label): bool
     {
         return $label->tasks()->exists();
     }

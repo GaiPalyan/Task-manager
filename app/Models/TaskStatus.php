@@ -13,14 +13,8 @@ class TaskStatus extends Model
 
     protected $fillable = ['name'];
 
-    public function creator(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function task(): HasMany
     {
         return $this->hasMany(Task::class, 'status_id');
     }
-
 }

@@ -6,6 +6,10 @@ use App\Http\Requests\BaseRequest;
 
 class StoreRequest extends BaseRequest
 {
+    protected array $statusCreateRules = [
+        'name' => ['unique:App\Models\TaskStatus,name', 'required'],
+    ];
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,6 +27,19 @@ class StoreRequest extends BaseRequest
      */
     public function rules()
     {
-        return parent::rules();
+        foreach ($this->statusCreateRules as $name => $rule) {
+            $this->baseRules[$name] = array_key_exists($name, $this->baseRules)
+                ? array_unique(array_merge($this->baseRules[$name], $rule))
+                : $this->baseRules[$name] = $rule;
+        }
+
+        return $this->baseRules;
+    }
+
+    public function messages()
+    {
+        $baseMessageBag = parent::messages();
+        $baseMessageBag['unique'] = 'Статус с таким именем уже существует';
+        return $baseMessageBag;
     }
 }

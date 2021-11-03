@@ -6,17 +6,23 @@
             <div>
                 <form method="GET" class="form-inline" accept-charset="UTF-8" action={{route('tasks.index')}}>
                     <select class="form-control mr-2" name="filter[status_id]">
-                        @foreach(data_get($availableOptions, 'statuses') as $status)
                             <option selected="selected" value="">{{__('Статус')}}</option>
-                            <option value="{{$status->id}}">{{$status->name}}</option>
+                        @foreach(data_get($availableOptions, 'options') as $status)
+                            <option value="{{$status->status_id}}">{{$status->status_name}}</option>
                         @endforeach
                     </select>
                     <select class="form-control mr-2" name="filter[created_by_id]">
-                        <option selected="selected" value="">{{__('Автор')}}</option>
+                            <option selected="selected" value="">{{__('Автор')}}</option>
+                        @foreach(data_get($availableOptions, 'options') as $creator)
+                            <option value="{{$creator->creator_id}}">{{$creator->creator_name}}</option>
+                        @endforeach
                     </select>
 
                     <select class="form-control mr-2" name="filter[assigned_to_id]">
                         <option selected="selected" value="">{{__('Исполнитель')}}</option>
+                        @foreach(data_get($availableOptions, 'performers') as $performer)
+                            <option value="{{$performer->performer_id}}">{{$performer->performer_name}}</option>
+                        @endforeach
                     </select>
 
                     <input class="btn btn-outline-primary mr-2" type="submit" value="Применить">
@@ -45,7 +51,7 @@
                     <td>{{$task->status_name}}</td>
                     <td><a href="{{route('tasks.show', $task)}}">{{$task->name}}</a></td>
                     <td>{{$task->creator_name}}</td>
-                    <td>{{$task->assignet_to}}</td>
+                    <td>{{$task->performer_name}}</td>
                     <td>{{$task->created_at}}</td>
                     <td>
                         @can('update', $task)

@@ -3,7 +3,6 @@
 namespace App\Domain;
 
 use App\Models\Task;
-use App\Models\TaskStatus;
 use App\Repositories\Label\LabelRepositoryInterface;
 use App\Repositories\Status\StatusRepositoryInterface;
 use App\Repositories\Task\TaskRepositoryInterface;
@@ -15,7 +14,9 @@ class TaskManager
     private TaskRepositoryInterface $taskRepository;
     private StatusRepositoryInterface $statusRepository;
     private LabelRepositoryInterface $labelRepository;
-    public function __construct(
+
+    public function __construct
+    (
         TaskRepositoryInterface $taskRepository,
         StatusRepositoryInterface $statusRepository,
         LabelRepositoryInterface $labelRepository,
@@ -26,24 +27,41 @@ class TaskManager
         $this->labelRepository = $labelRepository;
     }
 
-    public function getCreatorsList()
+    public function getFilterOptions(): array
     {
-        return $this->taskRepository->getCreators();
+        $options = $this->taskRepository->getAvailableFilterOptions();
+        $performers = $this->taskRepository->getAssignedPerformersList();
+
+        return compact('options', 'performers');
     }
 
-    public function getUniqueStatuses(): array
+    public function getCreatingOptions(): array
     {
-        return $this->statusRepository->getUniqueNamedList();
+        $labels = $this->labelRepository->getUniqueNamedList();
+        $statuses = $this->statusRepository->getAll();
+        $performers = $this->taskRepository->getAssignedPerformersList();
+
+        return compact('labels', 'statuses', 'performers');
     }
 
-    public function getUniqueLabels(): array
+    public function getUpdatingOptions(Task $task): array
     {
-        return $this->labelRepository->getUniqueNamedList();
+        $labels = $this->labelRepository->getUniqueNamedList();
+        $statuses = $this->statusRepository->getAll()
+                    ->reject(fn($status) => $status->id === $task->status_id);
+        $performers = $this->taskRepository->getAssignedPerformersList()
+                    ->reject(fn($performer) => $performer->performer_id === $task->assigned_to_id);
+
+       return compact('labels', 'statuses', 'performers');
     }
 
-    public function getTaskStatus(Task $task): TaskStatus
+    public function getTaskRelatedData(Task $task): array
     {
-        return $this->statusRepository->getStatusById($task->status_id);
+        $taskStatus = $this->taskRepository->getStatus($task);
+        $taskLabels = $this->taskRepository->getTaskLabels($task);
+        $taskPerformer = $this->taskRepository->getTaskPerformer($task);
+
+        return compact('taskStatus', 'taskLabels', 'taskPerformer');
     }
 
     public function getTaskList(): LengthAwarePaginator

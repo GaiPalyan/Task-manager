@@ -110,5 +110,4 @@ class LabelTest extends TestCase
 
         $this->assertDatabaseHas('labels', $label->only('id'));
     }
-
 }
