@@ -16,6 +16,8 @@ log:
 	tail -f storage/logs/laravel.log
 deploy:
 	git push heroku
+detect:
+	composer phpmd app ansi phpmd.ruleset.xml
 lint:
 	composer phpcs
 lint-fix:

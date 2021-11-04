@@ -20,14 +20,14 @@
         "squizlabs/php_codesniffer": "*"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
-        ,
+        "roave/security-advisories": "dev-latest",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.8"
+        "phpunit/phpunit": "^9.5.8",
+        "phpmd/phpmd" : "@stable"
     },
     "autoload": {
         "psr-4": {
@@ -47,6 +47,7 @@
     "scripts": {
         "phpcs": "phpcs",
         "phpcbf": "phpcbf",
+        "phpmd": "phpmd",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

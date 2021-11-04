@@ -14,6 +14,7 @@ jobs:
         with:
           # Specify the PHP version
           php-version: '8.0'
+          tools: phpmd
 
         #Install
       - name: Install
@@ -26,6 +27,10 @@ jobs:
         # Run Linter
       - name: Run linter
         run: make lint
+
+        #Run PHPMD
+      - name: Run PHPMD
+        run: phpmd . github phpmd.ruleset.xml --exclude 'tests/*'
 
         # Run tests
       - name: test
