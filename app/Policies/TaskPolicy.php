@@ -66,7 +66,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task)
     {
-        return (int) $user->id === (int) $task->created_by_id;
+        return $task->creator()->is($user);
     }
 
     /**

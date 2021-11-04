@@ -48,11 +48,11 @@
             @foreach($tasks as $task)
                 <tr>
                     <td>{{$task->id}}</td>
-                    <td>{{$task->status_name}}</td>
+                    <td>{{optional($task->status)->name}}</td>
                     <td><a href="{{route('tasks.show', $task)}}">{{$task->name}}</a></td>
-                    <td>{{$task->creator_name}}</td>
-                    <td>{{$task->performer_name}}</td>
-                    <td>{{$task->created_at}}</td>
+                    <td>{{optional($task->creator)->name}}</td>
+                    <td>{{optional($task->performer)->name}}</td>
+                    <td>{{$task->created_at->format('d M Y')}}</td>
                     <td>
                         @can('update', $task)
                             @can('delete', $task)

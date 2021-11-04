@@ -9,18 +9,22 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskRepository implements TaskRepositoryInterface
 {
 
     public function getList(): LengthAwarePaginator
     {
-        return Task::join('task_statuses as statuses', 'tasks.status_id', '=', 'statuses.id')
-             ->join('users as creators', 'tasks.created_by_id', '=', 'creators.id')
-             ->join('users as performers', 'tasks.assigned_to_id', '=', 'performers.id')
-             ->selectRaw('tasks.*, 
-               statuses.name as status_name, creators.name as creator_name, performers.name as performer_name')
-             ->paginate(10);
+        return QueryBuilder::for(Task::class)
+            ->allowedFilters(
+                [
+                    AllowedFilter::exact('status_id'),
+                    AllowedFilter::exact('created_by_id'),
+                    AllowedFilter::exact('assigned_to_id'),
+                ]
+            )->paginate(10);
     }
 
     public function getAvailableFilterOptions(): Collection

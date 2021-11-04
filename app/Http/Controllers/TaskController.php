@@ -30,7 +30,7 @@ class TaskController extends Controller
     {
         $availableOptions = $this->taskManager->getFilterOptions();
         $tasks = $this->taskManager->getTaskList();
-       return view('app.tasks.show', compact('tasks', 'availableOptions'));
+        return view('app.tasks.show', compact('tasks', 'availableOptions'));
     }
 
     /**
