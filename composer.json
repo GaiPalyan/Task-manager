@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-pdo": "*",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laracasts/flash": "^3.2",
@@ -15,8 +16,8 @@
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
         "rollbar/rollbar-laravel": "^7.0",
-        "squizlabs/php_codesniffer": "*",
-        "ext-pdo": "*"
+        "spatie/laravel-query-builder": "^4.0",
+        "squizlabs/php_codesniffer": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest"

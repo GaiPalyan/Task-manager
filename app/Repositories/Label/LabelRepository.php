@@ -3,6 +3,7 @@
 namespace App\Repositories\Label;
 
 use App\Models\Label;
+use Illuminate\Support\Collection;
 
 class LabelRepository implements LabelRepositoryInterface
 {
@@ -18,10 +19,9 @@ class LabelRepository implements LabelRepositoryInterface
     /**
      * @return array
      */
-    public function getUniqueNamedList(): array
+    public function getUniqueNamedList(): Collection
     {
-        $labels = Label::distinct('name')->get();
-        return compact('labels');
+        return Label::distinct('name')->get();
     }
 
     /**

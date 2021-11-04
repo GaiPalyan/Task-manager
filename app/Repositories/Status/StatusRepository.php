@@ -3,8 +3,7 @@
 namespace App\Repositories\Status;
 
 use App\Models\TaskStatus;
-use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Collection;
 
 class StatusRepository implements StatusRepositoryInterface
 {
@@ -14,10 +13,9 @@ class StatusRepository implements StatusRepositoryInterface
         return compact('statuses');
     }
 
-    public function getUniqueNamedList(): array
+    public function getAll(): Collection
     {
-        $statuses = TaskStatus::distinct('name')->get();
-        return compact('statuses');
+        return TaskStatus::all();
     }
 
     public function store(array $name): void

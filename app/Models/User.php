@@ -43,11 +43,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function statuses(): HasMany
-    {
-        return $this->hasMany(TaskStatus::class, 'user_id');
-    }
-
     public function task(): HasMany
     {
         return $this->hasMany(Task::class, 'created_by_id');
@@ -55,6 +50,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function assigned(): HasMany
     {
-        return $this->hasMany(Task::class, 'assigned_by_id');
+        return $this->hasMany(Task::class, 'assigned_to_id');
     }
 }

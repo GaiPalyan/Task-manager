@@ -17,7 +17,7 @@
             <label for="status_id">{{__('Статус')}}</label>
                 <select class="form-control @error('status_id') is-invalid @enderror" id="status_id" name="status_id">
                     <option selected="selected" value="">----------</option>
-                    @foreach(data_get($availableOptions, 'statuses') as $status)
+                    @foreach(data_get($creatingOptions, 'statuses') as $status)
                         <option value="{{$status->id}}">{{$status->name}}</option>
                     @endforeach
                 </select>
@@ -32,13 +32,16 @@
             <label for="assigned_to_id">{{__('Исполнитель')}}</label>
                 <select class="form-control" id="assigned_to_id" name="assigned_to_id">
                     <option selected="selected" value="">----------</option>
+                    @foreach(data_get($creatingOptions, 'performers') as $performer)
+                        <option value="{{$performer->performer_id}}">{{$performer->performer_name}}</option>
+                    @endforeach
                 </select>
         </x-form.form-item>
 
         <x-form.form-item>
             <label for="assigned_to_id">{{__('Метки')}}</label>
                 <select class="form-control" multiple="" name="labels[]">
-                    @foreach(data_get($availableOptions, 'labels') as $label)
+                    @foreach(data_get($creatingOptions, 'labels') as $label)
                     <option value="{{$label->id}}">{{$label->name}}</option>
                     @endforeach
                 </select>
