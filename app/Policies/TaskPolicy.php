@@ -7,6 +7,12 @@ use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
+/**
+ * Suppress all rules containing "unused" in this
+ * class
+ *
+ * @SuppressWarnings("unused")
+ */
 class TaskPolicy
 {
     use HandlesAuthorization;
@@ -15,9 +21,9 @@ class TaskPolicy
      * Determine whether the user can view any models.
      *
      * @param ?User $user
-     * @return Response|bool
+     * @return bool
      */
-    public function viewAny(?User $user)
+    public function viewAny(?User $user): bool
     {
         return true;
     }
@@ -27,9 +33,9 @@ class TaskPolicy
      *
      * @param User $user
      * @param  Task $task
-     * @return Response|bool
+     * @return bool
      */
-    public function view(User $user, Task $task)
+    public function view(User $user, Task $task): bool
     {
         return true;
     }
@@ -38,9 +44,9 @@ class TaskPolicy
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @return Response|bool
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return true;
     }
@@ -50,9 +56,9 @@ class TaskPolicy
      *
      * @param User $user
      * @param Task $task
-     * @return Response|bool
+     * @return bool
      */
-    public function update(User $user, Task $task)
+    public function update(User $user, Task $task): bool
     {
         return true;
     }
@@ -62,9 +68,9 @@ class TaskPolicy
      *
      * @param User $user
      * @param Task $task
-     * @return Response|bool
+     * @return bool
      */
-    public function delete(User $user, Task $task)
+    public function delete(User $user, Task $task): bool
     {
         return $task->creator()->is($user);
     }
@@ -74,22 +80,22 @@ class TaskPolicy
      *
      * @param User $user
      * @param  Task $task
-     * @return Response|bool
+     * @return bool
      */
-    public function restore(User $user, Task $task)
+    /*public function restore(User $user, Task $task): bool
     {
         //
-    }
+    }*/
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
      * @param  Task $task
-     * @return Response|bool
+     * @return bool
      */
-    public function forceDelete(User $user, Task $task)
+    public function forceDelete(User $user, Task $task): bool
     {
-        return $user->id === $task->created_by_id;
+        return $task->creator()->is($user);
     }
 }

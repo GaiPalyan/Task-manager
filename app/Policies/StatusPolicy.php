@@ -8,6 +8,12 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * Suppress all rules containing "unused" in this
+ * class
+ *
+ * @SuppressWarnings("unused")
+ */
 class StatusPolicy
 {
     use HandlesAuthorization;
@@ -15,10 +21,10 @@ class StatusPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param User $user
-     * @return Response|bool
+     * @param ?User $user
+     * @return bool
      */
-    public function viewAny(?User $user)
+    public function viewAny(?User $user): bool
     {
         return true;
     }
@@ -28,9 +34,9 @@ class StatusPolicy
      *
      * @param User $user
      * @param TaskStatus $status
-     * @return Response|bool
+     * @return bool
      */
-    public function view(User $user, TaskStatus $status)
+    public function view(User $user, TaskStatus $status): bool
     {
         return true;
     }
@@ -39,14 +45,19 @@ class StatusPolicy
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @return Response|bool
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return true;
     }
 
-    public function edit(User $user, TaskStatus $status)
+    /**
+     * @param User $user
+     * @param TaskStatus $status
+     * @return bool
+     */
+    public function edit(User $user, TaskStatus $status): bool
     {
         return true;
     }
@@ -55,9 +66,9 @@ class StatusPolicy
      *
      * @param User $user
      * @param TaskStatus $status
-     * @return Response|bool
+     * @return bool
      */
-    public function update(User $user, TaskStatus $status)
+    public function update(User $user, TaskStatus $status): bool
     {
         return true;
     }
@@ -67,9 +78,9 @@ class StatusPolicy
      *
      * @param User $user
      * @param TaskStatus $status
-     * @return Response|bool
+     * @return bool
      */
-    public function delete(User $user, TaskStatus $status)
+    public function delete(User $user, TaskStatus $status): bool
     {
         return true;
     }
@@ -79,12 +90,12 @@ class StatusPolicy
      *
      * @param User $user
      * @param TaskStatus $status
-     * @return Response|bool
+     * @return bool
      */
-    public function restore(User $user, TaskStatus $status)
+    /*public function restore(User $user, TaskStatus $status): bool
     {
         //
-    }
+    }*/
 
     /**
      * Determine whether the user can permanently delete the model.
@@ -93,8 +104,8 @@ class StatusPolicy
      * @param TaskStatus $status
      * @return Response|bool
      */
-    public function forceDelete(User $user, TaskStatus $status)
+    /*public function forceDelete(User $user, TaskStatus $status)
     {
         //
-    }
+    }*/
 }

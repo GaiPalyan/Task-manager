@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Label;
@@ -31,7 +33,8 @@ class LabelFactory extends Factory
                     'Indicates similar issues or pull requests',
                     'Indicates new feature requests',
                     'Indicates a good issue for first-time contributors',
-                ]),
+                ]
+            ),
         ];
     }
 }

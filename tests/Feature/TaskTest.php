@@ -12,27 +12,22 @@ class TaskTest extends TestCase
 {
     use WithFaker;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /* ----------- Tests actions as guest --------------- */
 
-    public function test_index(): void
+    public function testIndex(): void
     {
         $response = $this->get(route('tasks.index'));
         $response->assertOk();
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_create_as_guest(): void
+    public function testCreateAsGuest(): void
     {
         $response = $this->get(route('tasks.create'));
         $response->assertStatus(403);
     }
 
-    public function test_store_as_guest(): void
+    public function testStoreAsGuest(): void
     {
         $task = make(Task::class)->make()->toArray();
         $this->get(route('tasks.create'))
@@ -42,7 +37,7 @@ class TaskTest extends TestCase
         $this->assertDatabaseMissing('tasks', $task);
     }
 
-    public function test_update_as_guest(): void
+    public function testUpdateAsGuest(): void
     {
         $task = make(Task::class)->create();
         $this->get(route('tasks.edit', $task))
@@ -52,7 +47,7 @@ class TaskTest extends TestCase
         $this->assertDatabaseMissing('tasks', ['name' => 'new name']);
     }
 
-    public function test_delete_as_guest(): void
+    public function testDeleteAsGuest(): void
     {
         $task = make(Task::class)->create();
         $this->delete(route('tasks.destroy', $task))
@@ -62,14 +57,14 @@ class TaskTest extends TestCase
 
 /* ---------- test actions as user ------------------ */
 
-    public function test_create_as_user(): void
+    public function testCreateAsUser(): void
     {
         $this->actingAs($this->user)
              ->get(route('tasks.create'))
              ->assertOk();
     }
 
-    public function test_store_as_user()
+    public function testStoreAsUser(): void
     {
         $task = make(Task::class)->make([
                 'status_id' => make(TaskStatus::class)->create()->getAttribute('id'),
@@ -81,10 +76,9 @@ class TaskTest extends TestCase
              ->assertSessionHasNoErrors()
              ->assertRedirect(route('tasks.index'));
         $this->assertDatabaseHas('tasks', $task);
-
     }
 
-    public function test_update_as_user()
+    public function testUpdateAsUser(): void
     {
         $newData = make(Task::class)->make([
             'status_id' => make(TaskStatus::class)->create()->getAttribute('id')
@@ -99,7 +93,7 @@ class TaskTest extends TestCase
              ->assertSeeText('Задача успешно изменена');
     }
 
-   public function test_delete_user_task()
+    public function testDeleteUserTask(): void
     {
         $task = make(Task::class)->create([
             'created_by_id' => $this->user->id
@@ -113,7 +107,7 @@ class TaskTest extends TestCase
         $this->assertDeleted($task);
     }
 
-    public function test_delete_not_user_task()
+    public function testDeleteNotUserTask(): void
     {
         $task = make(Task::class)->create();
         $this->assertDatabaseHas('tasks', ['name' => $task->name]);

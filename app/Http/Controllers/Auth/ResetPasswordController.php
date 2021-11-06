@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +20,6 @@ class ResetPasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
-
     use ResetsPasswords;
 
     /**
@@ -26,5 +27,5 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected string $redirectTo = RouteServiceProvider::HOME;
 }

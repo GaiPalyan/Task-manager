@@ -1,30 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\TaskRequests;
 
 use App\Http\Requests\BaseRequest;
 
 class UpdateRequest extends BaseRequest
 {
-    protected $taskUpdateRules = [
+    protected array $taskUpdateRules = [
         'status_id' => ['required']
     ];
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
 
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         foreach ($this->taskUpdateRules as $name => $rule) {
             $this->baseRules[$name] = array_key_exists($name, $this->baseRules)
@@ -35,7 +28,10 @@ class UpdateRequest extends BaseRequest
         return $this->baseRules;
     }
 
-    public function messages()
+    /**
+     * @return array
+     */
+    public function messages(): array
     {
         $baseMessageBag = parent::messages();
         $baseMessageBag['unique'] = 'Задача с таким именем уже существует';

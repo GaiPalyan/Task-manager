@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,7 +41,8 @@ class Task extends Model
             Label::class,
             'label_task',
             'task_id',
-            'label_id')
+            'label_id'
+        )
             ->withTimestamps();
     }
 }

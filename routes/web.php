@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\StatusController;
@@ -26,7 +28,7 @@ Route::get('/', [HomeController::class, 'index'])->name('main');
 Auth::routes(['verify' => true]);
 
 /**
- * Task statuses routs group
+ * Statuses routs group
  */
 Route::resource('statuses', StatusController::class);
 
@@ -39,4 +41,3 @@ Route::resource('tasks', TaskController::class);
  * Label routs group
  */
 Route::resource('labels', LabelController::class);
-

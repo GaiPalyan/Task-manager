@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Domain\LabelsManager;
@@ -23,7 +25,7 @@ class LabelController extends Controller
      *
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         $labels = $this->labelsManager->getLabels();
         return view('app.labels.show', $labels);
@@ -37,7 +39,6 @@ class LabelController extends Controller
     public function create(): View
     {
         return view('app.labels.create');
-
     }
 
     /**

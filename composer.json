@@ -16,8 +16,7 @@
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
         "rollbar/rollbar-laravel": "^7.0",
-        "spatie/laravel-query-builder": "^4.0",
-        "squizlabs/php_codesniffer": "*"
+        "spatie/laravel-query-builder": "^4.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
@@ -27,7 +26,8 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
         "phpunit/phpunit": "^9.5.8",
-        "phpmd/phpmd" : "@stable"
+        "phpmd/phpmd" : "@stable",
+        "squizlabs/php_codesniffer": "*"
     },
     "autoload": {
         "psr-4": {

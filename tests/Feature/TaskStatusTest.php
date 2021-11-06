@@ -8,26 +8,22 @@ use Tests\TestCase;
 
 class TaskStatusTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /* ------ Tests actions as guest ------ */
-    public function test_index()
+
+    public function testIndex(): void
     {
         $response = $this->get(route('statuses.index'));
         $response->assertOk();
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_status_create_as_guest()
+    public function testStatusCreateAsGuest(): void
     {
         $response = $this->get(route('statuses.create'));
         $response->assertStatus(403);
     }
 
-    public function test_store_as_guest()
+    public function testStoreAsGuest(): void
     {
         $status = make(TaskStatus::class)->make()->toArray();
         $this->post(route('statuses.store', $status))
@@ -35,7 +31,7 @@ class TaskStatusTest extends TestCase
         $this->assertDatabaseMissing('task_statuses', $status);
     }
 
-    public function test_update_as_guest()
+    public function testUpdateAsGuest(): void
     {
         $status = make(TaskStatus::class)->create();
         $this->get(route('statuses.edit', $status))
@@ -45,7 +41,7 @@ class TaskStatusTest extends TestCase
         $this->assertDatabaseMissing('task_statuses', ['name' => 'new name']);
     }
 
-    public function test_delete_as_guest()
+    public function testDeleteAsGuest(): void
     {
         $status = make(TaskStatus::class)->create();
         $this->delete(route('statuses.destroy', $status))
@@ -55,7 +51,7 @@ class TaskStatusTest extends TestCase
 
     /* ------ Test actions as user ------- */
 
-    public function test_store_as_user()
+    public function testStoreAsUser(): void
     {
         $status = ['name' => 'New Status'];
         $this->actingAs($this->user)
@@ -68,7 +64,7 @@ class TaskStatusTest extends TestCase
             ->assertSeeText('Статус успешно создан');
     }
 
-    public function test_update_as_user()
+    public function testUpdateAsUser(): void
     {
         $newName = ['name' => 'Updated'];
         $status = make(TaskStatus::class)->create();
@@ -82,7 +78,7 @@ class TaskStatusTest extends TestCase
              ->assertSeeText('Статус успешно обновлен');
     }
 
-    public function test_delete_status_as_user()
+    public function testDeleteStatusAsUser(): void
     {
         $status = make(TaskStatus::class)->create();
         $this->actingAs($this->user)
@@ -96,7 +92,7 @@ class TaskStatusTest extends TestCase
         $this->assertDeleted($status);
     }
 
-    public function test_delete_status_associated_with_the_task()
+    public function testDeleteStatusAssociatedWithTheTask(): void
     {
         $status = TaskStatus::factory()
             ->has(Task::factory()->state(['name' => 'New task']), 'task')
@@ -112,5 +108,3 @@ class TaskStatusTest extends TestCase
         $this->assertDatabaseHas('task_statuses', $status->only('id'));
     }
 }
-
-

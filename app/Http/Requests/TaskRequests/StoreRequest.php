@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\TaskRequests;
 
 use App\Http\Requests\BaseRequest;
@@ -27,7 +29,10 @@ class StoreRequest extends BaseRequest
         return $this->baseRules;
     }
 
-    public function messages()
+    /**
+     * @return array
+     */
+    public function messages(): array
     {
         $baseMessageBag = parent::messages();
         $baseMessageBag['unique'] = 'Задача с таким именем уже существует';

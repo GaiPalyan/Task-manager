@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Repositories\Status\StatusRepository;
@@ -24,7 +26,7 @@ class StatusRepositoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->app->bind(StatusRepositoryInterface::class, StatusRepository::class);
     }

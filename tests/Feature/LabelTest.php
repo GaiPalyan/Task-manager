@@ -8,12 +8,7 @@ use Tests\TestCase;
 
 class LabelTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->get(route('labels.index'))
              ->assertSessionHasNoErrors()
@@ -21,13 +16,13 @@ class LabelTest extends TestCase
     }
     /* ------- Test actions as guest --------- */
 
-    public function test_create_as_guest()
+    public function testCreateAsGuest(): void
     {
         $response = $this->get(route('labels.create'));
         $response->assertStatus(403);
     }
 
-    public function test_store_as_guest()
+    public function testStoreAsGuest(): void
     {
         $status = make(Label::class)->make()->toArray();
         $this->post(route('statuses.store', $status))
@@ -35,7 +30,7 @@ class LabelTest extends TestCase
         $this->assertDatabaseMissing('task_statuses', $status);
     }
 
-    public function test_update_as_guest()
+    public function testUpdateAsGuest(): void
     {
         $label = make(Label::class)->create();
         $this->get(route('labels.edit', $label))
@@ -45,7 +40,7 @@ class LabelTest extends TestCase
         $this->assertDatabaseMissing('task_statuses', ['name' => 'new name']);
     }
 
-    public function test_delete_as_guest()
+    public function testDeleteAsGuest(): void
     {
         $label = make(Label::class)->create();
         $this->delete(route('labels.destroy', $label))
@@ -55,7 +50,7 @@ class LabelTest extends TestCase
 
     /* ------ Test actions as user ------- */
 
-    public function test_store_as_user()
+    public function testStoreAsUser()
     {
         $label = make(Label::class)->make()->toArray();
         $this->actingAs($this->user)
@@ -68,7 +63,7 @@ class LabelTest extends TestCase
             ->assertSeeText('Метка успешно создана');
     }
 
-    public function test_update_as_user()
+    public function testUpdateAsUser(): void
     {
         $newName = ['name' => 'Updated'];
         $label = make(Label::class)->create();
@@ -82,7 +77,7 @@ class LabelTest extends TestCase
             ->assertSeeText('Метка успешно изменена');
     }
 
-    public function test_delete_as_user()
+    public function testDeleteAsUser(): void
     {
         $label = make(Label::class)->create();
         $this->actingAs($this->user)
@@ -96,7 +91,7 @@ class LabelTest extends TestCase
         $this->assertDeleted($label);
     }
 
-    public function test_delete_label_attached_with_the_task()
+    public function testDeleteLabelAttachedWithTheTask(): void
     {
         $label = make(Label::class)
              ->hasAttached(Task::factory()->count(1))->create();

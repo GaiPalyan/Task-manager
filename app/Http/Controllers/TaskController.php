@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Domain\TaskManager;
@@ -36,9 +38,9 @@ class TaskController extends Controller
     /**
      * Show the form for creating a new tasks.
      *
-     * @return View|RedirectResponse
+     * @return View
      */
-    public function create(): View | RedirectResponse
+    public function create(): View
     {
         $creatingOptions = $this->taskManager->getCreatingOptions();
         return view('app.tasks.create', compact('creatingOptions'));
@@ -74,9 +76,9 @@ class TaskController extends Controller
      * Show the form for editing the tasks.
      *
      * @param Task $task
-     * @return View | RedirectResponse
+     * @return View
      */
-    public function edit(Task $task): View | RedirectResponse
+    public function edit(Task $task): View
     {
         $availableOptions = array_merge(
             $this->taskManager->getUpdatingOptions($task),
@@ -104,9 +106,9 @@ class TaskController extends Controller
      * Remove the tasks from storage.
      *
      * @param Task $task
-
+     * @return RedirectResponse
      */
-    public function destroy(Task $task)
+    public function destroy(Task $task): RedirectResponse
     {
         $this->taskManager->deleteTask($task);
         flash(__('Задача успешно удалена'))->success();

@@ -39,7 +39,7 @@
         </x-form.form-item>
 
         <x-form.form-item>
-            <label for="assigned_to_id">{{__('Метки')}}</label>
+            <label for="labels">{{__('Метки')}}</label>
                 <select class="form-control" multiple="" name="labels[]">
                     @foreach(data_get($creatingOptions, 'labels') as $label)
                     <option value="{{$label->id}}">{{$label->name}}</option>

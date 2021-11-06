@@ -7,6 +7,12 @@ use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
+/**
+ * Suppress all rules containing "unused" in this
+ * class
+ *
+ * @SuppressWarnings("unused")
+ */
 class LabelPolicy
 {
     use HandlesAuthorization;
@@ -15,9 +21,9 @@ class LabelPolicy
      * Determine whether the user can view any models.
      *
      * @param ?User $user
-     * @return Response|bool
+     * @return bool
      */
-    public function viewAny(?User $user)
+    public function viewAny(?User $user): bool
     {
         return true;
     }
@@ -27,9 +33,9 @@ class LabelPolicy
      *
      * @param ?User $user
      * @param Label $label
-     * @return Response|bool
+     * @return bool
      */
-    public function view(?User $user, Label $label)
+    public function view(?User $user, Label $label): bool
     {
         return true;
     }
@@ -76,10 +82,10 @@ class LabelPolicy
      * @param Label $label
      * @return Response|bool
      */
-    public function restore(User $user, Label $label)
+    /*public function restore(User $user, Label $label)
     {
         //
-    }
+    }*/
 
     /**
      * Determine whether the user can permanently delete the model.
@@ -88,8 +94,8 @@ class LabelPolicy
      * @param Label $label
      * @return Response|bool
      */
-    public function forceDelete(User $user, Label $label)
+    /*public function forceDelete(User $user, Label $label)
     {
         //
-    }
+    }*/
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Domain\StatusManager;
@@ -31,11 +33,10 @@ class StatusController extends Controller
         return view('app.statuses.show', $statuses);
     }
 
-
     /**
      * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('app.statuses.create');
     }
@@ -54,9 +55,9 @@ class StatusController extends Controller
 
     /**
      * @param TaskStatus $status
-     * @return View | RedirectResponse
+     * @return View
      */
-    public function edit(TaskStatus $status): View | RedirectResponse
+    public function edit(TaskStatus $status): View
     {
         return  view('app.statuses.edit', compact('status'));
     }

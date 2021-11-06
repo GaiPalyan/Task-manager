@@ -28,6 +28,9 @@ class BaseRequest extends FormRequest
         return $this->baseRules;
     }
 
+    /**
+     * @return array
+     */
     public function messages(): array
     {
         return [

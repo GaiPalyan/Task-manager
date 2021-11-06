@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Label;
 
 use App\Models\Label;
@@ -17,7 +19,7 @@ class LabelRepository implements LabelRepositoryInterface
     }
 
     /**
-     * @return array
+     * @return Collection
      */
     public function getUniqueNamedList(): Collection
     {
