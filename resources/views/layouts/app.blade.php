@@ -17,9 +17,11 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Task manager') }}
+                    {{ config('app.name', 'Менеджер задач') }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button"
+                        data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -27,13 +29,13 @@
                     <ul class="navbar-nav mr-auto">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('tasks.index')}}">{{__('Tasks')}}</a>
+                                <a class="nav-link" href="{{route('tasks.index')}}">{{__('Задачи')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('statuses.index')}}">{{__('Statuses')}}</a>
+                                <a class="nav-link" href="{{route('statuses.index')}}">{{__('Статусы')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('labels.index')}}">{{__('Label')}}</a>
+                                <a class="nav-link" href="{{route('labels.index')}}">{{__('Метки')}}</a>
                             </li>
                         </ul>
                     </ul>
@@ -43,13 +45,13 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Вход') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Регистрация') }}</a>
                                 </li>
                             @endif
                         @else
@@ -61,7 +63,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Выход') }}
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
