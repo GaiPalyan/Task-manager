@@ -4,6 +4,7 @@ setup:
 	composer install
 	npm install
 	cp -n .env.example .env || true
+	touch database/database.sqlite || true
 	php artisan key:gen --ansi
 	npm ci
 watch:
@@ -25,4 +26,10 @@ lint-fix:
 install:
 	composer install
 test:
+	php artisan config:clear
 	php artisan test
+clear:
+	php artisan route:clear
+	php artisan view:clear
+	php artisan cache:clear
+	php artisan config:clear
