@@ -1,6 +1,6 @@
 <x-form.form-item class="row">
     <x-form.label for="email">
-        {{ __('E-Mail') }}
+        {{ __('Email') }}
     </x-form.label>
 
     <div class="col-md-6">
