@@ -35,7 +35,7 @@ class LabelController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->labelsManager->saveLabel($request->all());
-        flash(__('Метка успешно создана '))->success();
+        flash(__('flash-messages.labelWasCreated'))->success();
         return redirect()->route('labels.index');
     }
 
@@ -47,19 +47,19 @@ class LabelController extends Controller
     public function update(UpdateRequest $request, Label $label): RedirectResponse
     {
         $this->labelsManager->updateLabel($request->all(), $label);
-        flash(__('Метка успешно изменена'))->success();
+        flash(__('flash-messages.labelWasUpdated'))->success();
         return redirect()->route('labels.index');
     }
 
     public function destroy(Label $label): RedirectResponse
     {
         if ($this->labelsManager->isAttached($label)) {
-            flash(__('Не удалось удалить метку'))->error();
+            flash(__('flash-messages.labelWasNotDeleted'))->error();
             return redirect()->route('labels.index');
         }
 
         $this->labelsManager->deleteLabel($label);
-        flash(__(' Метка успешно удалена'))->success();
+        flash(__('flash-messages.labelWasDeleted'))->success();
         return redirect()->route('labels.index');
     }
 }

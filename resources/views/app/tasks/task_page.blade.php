@@ -2,15 +2,15 @@
 @include('flash::message')
 @section('content')
     <h1 class="mb-5">
-            {{__('Просмотр задачи:')}} {{$task->name}}
+        @lang('interface.Task page'): {{$task->name}}
             <a  href="{{route('tasks.edit', $task)}}">
                 <x-img.edit-button />
             </a>
     </h1>
-            <p>{{__('Имя:')}} {{$task->name}}</p>
-            <p>{{__('Статус:')}} {{data_get($taskData, 'taskStatus.name')}}</p>
-            <p>{{__('Описание:')}} {{$task->description}}</p>
-            <p>{{_('Метки:')}}</p>
+            <p>@lang('interface.Name'): {{$task->name}}</p>
+            <p>@lang('interface.Status'): {{data_get($taskData, 'taskStatus.name')}}</p>
+            <p>@lang('interface.Description'): {{$task->description}}</p>
+            <p>@lang('interface.Labels'):</p>
                 <ul>
                     @foreach(data_get($taskData, 'taskLabels') as $label)
                         <li>{{$label->name}}</li>

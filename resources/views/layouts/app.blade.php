@@ -6,7 +6,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="csrf-param" content="_token" />
-    <title>{{ config('app.name', 'Task manager') }}</title>
+    <title>{{ config('app.name') }}</title>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Styles -->
@@ -29,13 +29,13 @@
                     <ul class="navbar-nav mr-auto">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('tasks.index')}}">{{__('Задачи')}}</a>
+                                <a class="nav-link" href="{{route('tasks.index')}}">@lang('interface.Tasks')</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('statuses.index')}}">{{__('Статусы')}}</a>
+                                <a class="nav-link" href="{{route('statuses.index')}}">@lang('interface.Statuses')</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('labels.index')}}">{{__('Метки')}}</a>
+                                <a class="nav-link" href="{{route('labels.index')}}">@lang('interface.Labels')</a>
                             </li>
                         </ul>
                     </ul>
@@ -45,13 +45,13 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Вход') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">@lang('interface.Log in')</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Регистрация') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">@lang('interface.Register')</a>
                                 </li>
                             @endif
                         @else
@@ -63,7 +63,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Выход') }}
+                                        @lang('interface.Log out')
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf

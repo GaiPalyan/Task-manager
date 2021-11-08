@@ -1,18 +1,18 @@
 @extends('layouts.app')
 @section('content')
     @include('flash::message')
-    <h1 class="mb-5">{{__('Метки')}}</h1>
+    <h1 class="mb-5">@lang('interface.Labels')</h1>
     @auth
-        <a class="btn btn-primary ml-auto" href="{{route('labels.create')}}">{{__('Create label')}}</a>
+        <a class="btn btn-primary ml-auto" href="{{route('labels.create')}}">@lang('interface.Create label')</a>
     @endauth
     <table class="table mt-2">
         <thead>
             <tr>
-                <th>{{__('ID')}}</th>
-                <th>{{__('Имя')}}</th>
-                <th>{{__('Описание')}}</th>
-                <th>{{__('Дата создания')}}</th>
-                <th>{{__('Действия')}}</th>
+                <th>@lang('ID')</th>
+                <th>@lang('interface.Name')</th>
+                <th>@lang('interface.Description')</th>
+                <th>@lang('interface.Created at')</th>
+                <th>@lang('interface.Actions')</th>
             </tr>
         </thead>
         <tbody>
@@ -26,12 +26,12 @@
                     @can('delete', $label)
                         <a class="btn btn-danger btn-sm"
                            data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{route('labels.destroy', $label)}}">
-                            {{__('delete')}}
+                            @lang('interface.Delete')
                         </a>
                     @endcan
                     @can('update', $label)
                          <a class="btn btn-success btn-sm" href="{{route('labels.edit', $label)}}">
-                                {{__('edit')}}
+                             @lang('interface.Edit')
                          </a>
                     @endcan
                 </td>

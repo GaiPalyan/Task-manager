@@ -15,10 +15,10 @@ class StoreRequest extends BaseRequest
 
     public function rules(): array
     {
-        foreach ($this->taskCreateRules as $name => $rule) {
-            $this->baseRules[$name] = array_key_exists($name, $this->baseRules)
-                ? array_unique(array_merge($this->baseRules[$name], $rule))
-                : $this->baseRules[$name] = $rule;
+        foreach ($this->taskCreateRules as $attribute => $rule) {
+            $this->baseRules[$attribute] = array_key_exists($attribute, $this->baseRules)
+                ? array_unique(array_merge($this->baseRules[$attribute], $rule))
+                : $this->baseRules[$attribute] = $rule;
         }
 
         return $this->baseRules;

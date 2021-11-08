@@ -35,7 +35,7 @@ class StatusController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->statusManager->saveStatus($request->all());
-        flash(__('Статус успешно создан'))->success();
+        flash(__('flash-messages.statusWasCreated'))->success();
 
         return redirect()->route('statuses.index');
     }
@@ -48,7 +48,7 @@ class StatusController extends Controller
     public function update(UpdateRequest $request, TaskStatus $status): RedirectResponse
     {
         $this->statusManager->updateStatus($request->all(), $status);
-        flash(__('Статус успешно обновлен'))->success();
+        flash(__('flash-messages.statusWasUpdated'))->success();
 
         return redirect()->route('statuses.index');
     }
@@ -56,12 +56,12 @@ class StatusController extends Controller
     public function destroy(TaskStatus $status): RedirectResponse
     {
         if ($this->statusManager->isAssociated($status)) {
-            flash(__('Не удалось удалить статус'))->error();
+            flash(__('flash-messages.statusWasNotDeleted'))->error();
             return redirect()->route('statuses.index');
         }
 
         $this->statusManager->deleteStatus($status);
-        flash(__('Статус успешно удалён'))->success();
+        flash(__('flash-messages.statusWasDeleted'))->success();
 
         return redirect()->route('statuses.index');
     }

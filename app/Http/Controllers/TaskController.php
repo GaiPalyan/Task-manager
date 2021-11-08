@@ -37,7 +37,7 @@ class TaskController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->taskManager->saveTask($request->all(), auth()->user());
-        flash(__('Задача успешно создана'))->success();
+        flash(__('taskWasCreated'))->success();
 
         return redirect()->route('tasks.index');
     }
@@ -61,14 +61,14 @@ class TaskController extends Controller
     public function update(UpdateRequest $request, Task $task): RedirectResponse
     {
         $this->taskManager->updateTask($request->all(), $task);
-        flash(__('Задача успешно изменена'))->success();
+        flash(__('taskWasUpdated'))->success();
         return redirect()->route('tasks.index');
     }
 
     public function destroy(Task $task): RedirectResponse
     {
         $this->taskManager->deleteTask($task);
-        flash(__('Задача успешно удалена'))->success();
+        flash(__('taskWasDeleted'))->success();
         return redirect()->route('tasks.index');
     }
 }

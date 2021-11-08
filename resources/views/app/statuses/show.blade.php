@@ -1,16 +1,16 @@
 @extends('layouts.app')
 @section('content')
-    <h1 class="mb-5">{{__('Статусы')}}</h1>
+    <h1 class="mb-5">@lang('interface.Status')</h1>
     @auth()
-    <a class="btn btn-primary" href="{{route('statuses.create')}}">{{ __('Create status') }}</a>
+    <a class="btn btn-primary" href="{{route('statuses.create')}}">@lang('interface.Create status')</a>
     @endauth
     <table class="table mt-2">
         <thead>
             <tr>
-                <th>{{ __('ID') }}</th>
-                <th>{{ __('Name') }}</th>
-                <th>{{ __('Created date') }}</th>
-                <th>{{ __('action') }}</th>
+                <th>@lang('ID')</th>
+                <th>@lang('interface.Name')</th>
+                <th>@lang('interface.Created at')</th>
+                <th>@lang('interface.Actions')</th>
             </tr>
         </thead>
         <tbody>
@@ -23,12 +23,12 @@
                             @can('delete', $status)
                                 <a class="btn btn-danger btn-sm ml-2"
                                 data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('statuses.destroy', $status) }}">
-                                    {{__('delete')}}
+                                    @lang('interface.Delete')
                                 </a>
                             @endcan
                             @can('update', $status)
                                 <a class="btn btn-success btn-sm float-left" href="{{ route('statuses.edit', $status) }}">
-                                    {{__('edit')}}
+                                    @lang('interface.Edit')
                                 </a>
                             @endcan
                     </td>

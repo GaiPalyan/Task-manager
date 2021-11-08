@@ -23,9 +23,6 @@ class UpdateRequest extends BaseRequest
         return $this->baseRules;
     }
 
-    /**
-     * @return array
-     */
     public function messages(): array
     {
         $baseMessageBag = parent::messages();

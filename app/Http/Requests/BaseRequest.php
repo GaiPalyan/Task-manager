@@ -20,11 +20,4 @@ class BaseRequest extends FormRequest
     {
         return $this->baseRules;
     }
-
-    public function messages(): array
-    {
-        return [
-            'required' => 'Поле не может быть пустым',
-        ];
-    }
 }

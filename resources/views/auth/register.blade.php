@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <x-card>
                 <x-card-header>
-                    {{ __('Регистрация') }}
+                    @lang('interface.Register')
                 </x-card-header>
 
                 <x-card-body>
@@ -15,7 +15,7 @@
 
                         <x-form.form-item class="row">
                             <x-form.label for="name">
-                                {{ __('Имя') }}
+                                @lang('interface.Name')
                             </x-form.label>
 
                             <div class="col-md-6">
@@ -26,7 +26,7 @@
                         @include('layouts.auth')
 
                         <x-form.form-item class="row">
-                            <x-form.label for="password-confirm">{{ __('Подтверждение') }}</x-form.label>
+                            <x-form.label for="password-confirm">@lang('interface.Confirmation')</x-form.label>
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control"
@@ -36,7 +36,7 @@
                         <x-form.form-item class="row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button class="btn btn-primary" type="submit">
-                                    {{ __('Зарегистрировать') }}
+                                    @lang('interface.RegisterBtn')
                                 </button>
                             </div>
                         </x-form.form-item>
