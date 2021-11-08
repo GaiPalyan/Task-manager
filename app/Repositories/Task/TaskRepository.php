@@ -17,9 +17,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 class TaskRepository implements TaskRepositoryInterface
 {
 
-    /**
-     * @return LengthAwarePaginator
-     */
     public function getList(): LengthAwarePaginator
     {
         return QueryBuilder::for(Task::class)
@@ -32,9 +29,6 @@ class TaskRepository implements TaskRepositoryInterface
             )->paginate(10);
     }
 
-    /**
-     * @return Collection
-     */
     public function getAvailableFilterOptions(): Collection
     {
         return Task::join('users as creators', 'tasks.created_by_id', '=', 'creators.id')
@@ -45,9 +39,6 @@ class TaskRepository implements TaskRepositoryInterface
              ->get();
     }
 
-    /**
-     * @return Collection
-     */
     public function getAssignedPerformersList(): Collection
     {
         return Task::join('users as performers', 'tasks.assigned_to_id', '=', 'performers.id')
@@ -56,45 +47,28 @@ class TaskRepository implements TaskRepositoryInterface
              ->get();
     }
 
-    /**
-     * @param Task $task
-     * @return TaskStatus|BelongsTo
-     */
     public function getStatus(Task $task): TaskStatus | BelongsTo
     {
         return $task->status()->firstOrFail();
     }
 
-    /**
-     * @param Task $task
-     * @return User|BelongsTo
-     */
     public function getTaskPerformer(Task $task): User | BelongsTo
     {
         return $task->performer()->firstOrFail();
     }
 
-    /**
-     * @param Task $task
-     * @return Collection
-     */
     public function getTaskLabels(Task $task): Collection
     {
         return $task->labels()->get();
     }
 
-    /**
-     * @param Authenticatable $creator
-     * @param array $inputData
-     * @param TaskStatus $status
-     */
     public function store(Authenticatable $creator, array $inputData, TaskStatus $status): void
     {
         $task = User::findOrFail($creator->getAuthIdentifier())
-             ->task()
-             ->make($inputData)
-             ->status()
-             ->associate($status);
+            ->task()
+            ->make($inputData)
+            ->status()
+            ->associate($status);
         $task->save();
 
         if (isset($inputData['labels'])) {
@@ -102,10 +76,6 @@ class TaskRepository implements TaskRepositoryInterface
         }
     }
 
-    /**
-     * @param array $inputData
-     * @param Task $task
-     */
     public function update(array $inputData, Task $task): void
     {
         $task->fill($inputData);
@@ -116,12 +86,8 @@ class TaskRepository implements TaskRepositoryInterface
         }
     }
 
-    /**
-     * @param Task $task
-     */
     public function delete(Task $task): void
     {
-        //$task->labels()->detach();
         $task->delete();
     }
 }

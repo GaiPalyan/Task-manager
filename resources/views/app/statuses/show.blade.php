@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
-    <h1 class="mb-5">Statuses</h1>
-    @if(auth()->user())
+    <h1 class="mb-5">{{__('Статусы')}}</h1>
+    @auth()
     <a class="btn btn-primary" href="{{route('statuses.create')}}">{{ __('Create status') }}</a>
-    @endif
+    @endauth
     <table class="table mt-2">
         <thead>
             <tr>

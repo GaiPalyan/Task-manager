@@ -9,26 +9,18 @@ use Illuminate\Support\Collection;
 
 class LabelRepository implements LabelRepositoryInterface
 {
-    /**
-     * @return array
-     */
+
     public function getList(): array
     {
         $labels = Label::select('*')->orderByDesc('created_at')->paginate(10);
         return compact('labels');
     }
 
-    /**
-     * @return Collection
-     */
     public function getUniqueNamedList(): Collection
     {
         return Label::distinct('name')->get();
     }
 
-    /**
-     * @param array $data
-     */
     public function store(array $data): void
     {
         $label = new Label();
@@ -36,10 +28,6 @@ class LabelRepository implements LabelRepositoryInterface
         $label->save();
     }
 
-    /**
-     * @param array $data
-     * @param Label $label
-     */
     public function update(array $data, Label $label): void
     {
         $label->fill($data);

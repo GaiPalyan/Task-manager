@@ -102,6 +102,7 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
     ],
+
     'rollbar' => [
         'driver' => 'monolog',
         'handler' => \Rollbar\Laravel\MonologHandler::class,

@@ -15,36 +15,23 @@ class StatusController extends Controller
 {
     public StatusManager $statusManager;
 
-    /**
-     * @param StatusManager $statusManager
-     */
     public function __construct(StatusManager $statusManager)
     {
         $this->statusManager = $statusManager;
         $this->authorizeResource(TaskStatus::class, 'status');
     }
 
-    /**
-     * @return View
-     */
     public function index(): View
     {
         $statuses = $this->statusManager->getStatusList();
         return view('app.statuses.show', $statuses);
     }
 
-    /**
-     * @return View
-     */
     public function create(): View
     {
         return view('app.statuses.create');
     }
 
-    /**
-     * @param StoreRequest $request
-     * @return RedirectResponse
-     */
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->statusManager->saveStatus($request->all());
@@ -53,20 +40,11 @@ class StatusController extends Controller
         return redirect()->route('statuses.index');
     }
 
-    /**
-     * @param TaskStatus $status
-     * @return View
-     */
     public function edit(TaskStatus $status): View
     {
         return  view('app.statuses.edit', compact('status'));
     }
 
-    /**
-     * @param UpdateRequest $request
-     * @param TaskStatus $status
-     * @return RedirectResponse
-     */
     public function update(UpdateRequest $request, TaskStatus $status): RedirectResponse
     {
         $this->statusManager->updateStatus($request->all(), $status);
@@ -75,10 +53,6 @@ class StatusController extends Controller
         return redirect()->route('statuses.index');
     }
 
-    /**
-     * @param TaskStatus $status
-     * @return RedirectResponse
-     */
     public function destroy(TaskStatus $status): RedirectResponse
     {
         if ($this->statusManager->isAssociated($status)) {

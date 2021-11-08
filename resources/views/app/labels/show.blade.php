@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
     @include('flash::message')
-    <h1 class="mb-5">Labels</h1>
-    @if(auth()->user())
-            <a class="btn btn-primary ml-auto" href="{{route('labels.create')}}">{{__('Create label')}}</a>
-    @endif
+    <h1 class="mb-5">{{__('Метки')}}</h1>
+    @auth
+        <a class="btn btn-primary ml-auto" href="{{route('labels.create')}}">{{__('Create label')}}</a>
+    @endauth
     <table class="table mt-2">
         <thead>
             <tr>

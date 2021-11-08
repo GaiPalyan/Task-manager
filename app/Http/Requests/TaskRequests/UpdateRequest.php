@@ -12,11 +12,6 @@ class UpdateRequest extends BaseRequest
         'status_id' => ['required']
     ];
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         foreach ($this->taskUpdateRules as $name => $rule) {

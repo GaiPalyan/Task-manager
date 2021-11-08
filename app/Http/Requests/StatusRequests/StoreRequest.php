@@ -12,11 +12,6 @@ class StoreRequest extends BaseRequest
         'name' => ['unique:App\Models\TaskStatus,name', 'required'],
     ];
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         foreach ($this->statusCreateRules as $name => $rule) {
@@ -28,9 +23,6 @@ class StoreRequest extends BaseRequest
         return $this->baseRules;
     }
 
-    /**
-     * @return array
-     */
     public function messages(): array
     {
         $baseMessageBag = parent::messages();

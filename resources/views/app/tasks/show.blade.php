@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     @include('flash::message')
-    <h1 class="mb-5">Tasks</h1>
+    <h1 class="mb-5">{{__('Задачи')}}</h1>
         <div class="d-flex">
             <div>
                 <form method="GET" class="form-inline" accept-charset="UTF-8" action={{route('tasks.index')}}>
@@ -28,9 +28,9 @@
                     <input class="btn btn-outline-primary mr-2" type="submit" value="Применить">
                 </form>
             </div>
-            @if(auth()->user())
+            @auth
             <a class="btn btn-primary ml-auto" href="{{route('tasks.create')}}">{{__('Create task')}}</a>
-            @endif
+            @endauth
         </div>
     <table class="table mt-2">
         <thead>
