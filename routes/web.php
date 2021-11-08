@@ -25,7 +25,7 @@ Route::get('/', [HomeController::class, 'index'])->name('main');
 /**
  * Authenticate & authorization routs group
  */
-Auth::routes(['verify' => true]);
+Auth::routes();
 
 /**
  * Statuses routs group
