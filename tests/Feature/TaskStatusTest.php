@@ -75,7 +75,7 @@ class TaskStatusTest extends TestCase
         $this->assertDatabaseHas('task_statuses', $newName);
 
         $this->get(route('statuses.index'))
-             ->assertSeeText('Статус успешно обновлен');
+             ->assertSeeText('Статус успешно изменён');
     }
 
     public function testDeleteStatusAsUser(): void
