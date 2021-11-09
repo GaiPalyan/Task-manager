@@ -25,9 +25,9 @@ class LabelTest extends TestCase
     public function testStoreAsGuest(): void
     {
         $status = make(Label::class)->make()->toArray();
-        $this->post(route('statuses.store', $status))
+        $this->post(route('labels.store', $status))
             ->assertStatus(403);
-        $this->assertDatabaseMissing('task_statuses', $status);
+        $this->assertDatabaseMissing('labels', $status);
     }
 
     public function testUpdateAsGuest(): void

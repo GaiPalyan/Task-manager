@@ -11,7 +11,7 @@ return [
     'Description' => 'Описание',
     'Created at' => 'Дата создания',
     'Task page' => 'Просмотр задачи',
-    'Log in' => 'Войти',
+    'Log in' => 'Вход',
     'Log out' => 'Выход',
     'LoginBtn' => 'Войти',
     'RegisterBtn' => 'Зарегистрировать',

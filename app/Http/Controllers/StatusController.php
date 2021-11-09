@@ -37,7 +37,7 @@ class StatusController extends Controller
         $this->statusManager->saveStatus($request->all());
         flash(__('flash-messages.statusWasCreated'))->success();
 
-        return redirect()->route('statuses.index');
+        return redirect()->route('task_statuses.index');
     }
 
     public function edit(TaskStatus $status): View
@@ -50,19 +50,19 @@ class StatusController extends Controller
         $this->statusManager->updateStatus($request->all(), $status);
         flash(__('flash-messages.statusWasUpdated'))->success();
 
-        return redirect()->route('statuses.index');
+        return redirect()->route('task_statuses.index');
     }
 
     public function destroy(TaskStatus $status): RedirectResponse
     {
         if ($this->statusManager->isAssociated($status)) {
             flash(__('flash-messages.statusWasNotDeleted'))->error();
-            return redirect()->route('statuses.index');
+            return redirect()->route('task_statuses.index');
         }
 
         $this->statusManager->deleteStatus($status);
         flash(__('flash-messages.statusWasDeleted'))->success();
 
-        return redirect()->route('statuses.index');
+        return redirect()->route('task_statuses.index');
     }
 }

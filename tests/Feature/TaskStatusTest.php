@@ -12,21 +12,21 @@ class TaskStatusTest extends TestCase
 
     public function testIndex(): void
     {
-        $response = $this->get(route('statuses.index'));
+        $response = $this->get(route('task_statuses.index'));
         $response->assertOk();
         $response->assertSessionHasNoErrors();
     }
 
     public function testStatusCreateAsGuest(): void
     {
-        $response = $this->get(route('statuses.create'));
+        $response = $this->get(route('task_statuses.create'));
         $response->assertStatus(403);
     }
 
     public function testStoreAsGuest(): void
     {
         $status = make(TaskStatus::class)->make()->toArray();
-        $this->post(route('statuses.store', $status))
+        $this->post(route('task_statuses.store', $status))
             ->assertStatus(403);
         $this->assertDatabaseMissing('task_statuses', $status);
     }
@@ -34,9 +34,9 @@ class TaskStatusTest extends TestCase
     public function testUpdateAsGuest(): void
     {
         $status = make(TaskStatus::class)->create();
-        $this->get(route('statuses.edit', $status))
+        $this->get(route('task_statuses.edit', $status))
              ->assertStatus(403);
-        $this->patch(route('statuses.update', $status), ['name' => 'new name'])
+        $this->patch(route('task_statuses.update', $status), ['name' => 'new name'])
              ->assertStatus(403);
         $this->assertDatabaseMissing('task_statuses', ['name' => 'new name']);
     }
@@ -44,7 +44,7 @@ class TaskStatusTest extends TestCase
     public function testDeleteAsGuest(): void
     {
         $status = make(TaskStatus::class)->create();
-        $this->delete(route('statuses.destroy', $status))
+        $this->delete(route('task_statuses.destroy', $status))
              ->assertStatus(403);
         $this->assertDatabaseHas('task_statuses', $status->only('id'));
     }
@@ -55,12 +55,12 @@ class TaskStatusTest extends TestCase
     {
         $status = ['name' => 'New Status'];
         $this->actingAs($this->user)
-             ->post(route('statuses.store'), $status)
+             ->post(route('task_statuses.store'), $status)
              ->assertSessionHasNoErrors()
              ->assertRedirect();
         $this->assertDatabaseHas('task_statuses', $status);
 
-        $this->get(route('statuses.index'))
+        $this->get(route('task_statuses.index'))
             ->assertSeeText('Статус успешно создан');
     }
 
@@ -69,12 +69,12 @@ class TaskStatusTest extends TestCase
         $newName = ['name' => 'Updated'];
         $status = make(TaskStatus::class)->create();
         $this->actingAs($this->user)
-             ->patch(route('statuses.update', $status), $newName)
-             ->assertRedirect(route('statuses.index'))
+             ->patch(route('task_statuses.update', $status), $newName)
+             ->assertRedirect(route('task_statuses.index'))
              ->assertSessionHasNoErrors();
         $this->assertDatabaseHas('task_statuses', $newName);
 
-        $this->get(route('statuses.index'))
+        $this->get(route('task_statuses.index'))
              ->assertSeeText('Статус успешно изменён');
     }
 
@@ -82,11 +82,11 @@ class TaskStatusTest extends TestCase
     {
         $status = make(TaskStatus::class)->create();
         $this->actingAs($this->user)
-             ->delete(route('statuses.update', $status))
+             ->delete(route('task_statuses.update', $status))
              ->assertSessionHasNoErrors()
-             ->assertRedirect(route('statuses.index'));
+             ->assertRedirect(route('task_statuses.index'));
 
-        $this->get(route('statuses.index'))
+        $this->get(route('task_statuses.index'))
              ->assertSeeText('Статус успешно удалён');
 
         $this->assertDeleted($status);
@@ -99,10 +99,10 @@ class TaskStatusTest extends TestCase
             ->create();
 
         $this->actingAs($this->user);
-        $this->delete(route('statuses.destroy', $status))
+        $this->delete(route('task_statuses.destroy', $status))
             ->assertRedirect();
 
-        $this->get(route('statuses.index'))
+        $this->get(route('task_statuses.index'))
             ->assertSeeText('Не удалось удалить статус');
 
         $this->assertDatabaseHas('task_statuses', $status->only('id'));

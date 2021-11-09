@@ -17,7 +17,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Менеджер задач') }}
+                    @lang('interface.appName')
                 </a>
                 <button class="navbar-toggler" type="button"
                         data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -32,7 +32,7 @@
                                 <a class="nav-link" href="{{route('tasks.index')}}">@lang('interface.Tasks')</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('statuses.index')}}">@lang('interface.Statuses')</a>
+                                <a class="nav-link" href="{{route('task_statuses.index')}}">@lang('interface.Statuses')</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('labels.index')}}">@lang('interface.Labels')</a>

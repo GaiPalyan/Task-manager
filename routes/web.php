@@ -30,7 +30,8 @@ Auth::routes();
 /**
  * Statuses routs group
  */
-Route::resource('statuses', StatusController::class);
+Route::resource('task_statuses', StatusController::class)
+    ->parameters(['task_statuses' => 'status']);
 
 /**
  * Tasks routs group
