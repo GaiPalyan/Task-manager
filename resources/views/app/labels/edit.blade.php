@@ -15,6 +15,6 @@
                       name="description" cols="50" rows="10"
                       id="description">{{$label->description}}</textarea>
         </x-form.form-item>
-        <x-form.submit value="{{__('interface.Update label')}}"/>
+        <x-form.submit value="{{__('interface.Update btn')}}"/>
     </x-form.form>
 @endsection
