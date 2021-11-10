@@ -10,7 +10,9 @@
                 <th>@lang('ID')</th>
                 <th>@lang('interface.Name')</th>
                 <th>@lang('interface.Created at')</th>
+                @auth()
                 <th>@lang('interface.Actions')</th>
+                @endauth
             </tr>
         </thead>
         <tbody>
@@ -19,19 +21,17 @@
                     <td>{{$status->id}}</td>
                     <td>{{$status->name}}</td>
                     <td>{{$status->created_at->format('d.m.Y')}}</td>
+                    @auth()
                     <td>
-                            @can('delete', $status)
-                                <a class="btn btn-danger btn-sm ml-2"
-                                data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('task_statuses.destroy', $status) }}">
-                                    @lang('interface.Delete')
-                                </a>
-                            @endcan
-                            @can('update', $status)
-                                <a class="btn btn-success btn-sm float-left" href="{{ route('task_statuses.edit', $status) }}">
-                                    @lang('interface.Edit')
-                                </a>
-                            @endcan
+                        <a class="btn btn-outline-danger btn-sm"
+                           data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('task_statuses.destroy', $status) }}">
+                            @lang('interface.Delete')
+                        </a>
+                        <a class="btn btn-outline-success btn-sm" href="{{ route('task_statuses.edit', $status) }}">
+                            @lang('interface.Edit')
+                        </a>
                     </td>
+                    @endauth
                 </tr>
             @endforeach
         </tbody>

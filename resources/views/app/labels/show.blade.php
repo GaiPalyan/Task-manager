@@ -12,7 +12,9 @@
                 <th>@lang('interface.Name')</th>
                 <th>@lang('interface.Description')</th>
                 <th>@lang('interface.Created at')</th>
+                @auth()
                 <th>@lang('interface.Actions')</th>
+                @endauth
             </tr>
         </thead>
         <tbody>
@@ -22,19 +24,17 @@
                 <td>{{$label->name}}</td>
                 <td>{{$label->description}}</td>
                 <td>{{$label->created_at->format('d.m.Y')}}</td>
+                @auth()
                 <td>
-                    @can('delete', $label)
-                        <a class="btn btn-danger btn-sm"
-                           data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{route('labels.destroy', $label)}}">
-                            @lang('interface.Delete')
-                        </a>
-                    @endcan
-                    @can('update', $label)
-                         <a class="btn btn-success btn-sm" href="{{route('labels.edit', $label)}}">
-                             @lang('interface.Edit')
-                         </a>
-                    @endcan
+                    <a class="btn btn-outline-danger btn-sm"
+                       data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{route('labels.destroy', $label)}}">
+                        @lang('interface.Delete')
+                    </a>
+                    <a class="btn btn-outline-success btn-sm" href="{{route('labels.edit', $label)}}">
+                        @lang('interface.Edit')
+                    </a>
                 </td>
+                @endauth
             </tr>
         @endforeach
         </tbody>

@@ -1,5 +1,5 @@
-@charset "UTF-8";
 @import url(https://fonts.googleapis.com/css?family=Nunito);
+@charset "UTF-8";
 /*!
  * Bootstrap v4.6.0 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
@@ -3993,7 +3993,7 @@ input[type=button].btn-block {
   list-style: none;
 }
 .navbar-nav .nav-link {
-  padding-right: 0;
+  padding-right: 0px;
   padding-left: 0;
 }
 .navbar-nav .dropdown-menu {

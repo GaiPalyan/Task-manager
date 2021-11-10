@@ -11,6 +11,9 @@ watch:
 	npm run watch
 migrate:
 	php artisan migrate
+seed:
+	php artisan migrate:refresh
+	php artisan db:seed
 console:
 	php artisan tinker
 log:

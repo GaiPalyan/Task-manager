@@ -41,7 +41,9 @@
                 <th>@lang('interface.Author')</th>
                 <th>@lang('interface.Performer')</th>
                 <th>@lang('interface.Created at')</th>
+                @auth()
                 <th>@lang('interface.Actions')</th>
+                @endauth
             </tr>
         </thead>
         <tbody>
@@ -56,12 +58,12 @@
                     <td>
                         @can('update', $task)
                             @can('delete', $task)
-                            <a class="btn btn-danger btn-sm ml-2"
+                            <a class="btn btn-outline-danger btn-sm"
                                data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('tasks.destroy', $task) }}">
                                 @lang('interface.Delete')
                             </a>
                             @endcan
-                            <a class="btn btn-success btn-sm float-left" href="{{ route('tasks.edit', $task) }}">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('tasks.edit', $task) }}">
                                 @lang('interface.Edit')
                             </a>
                         @endcan
