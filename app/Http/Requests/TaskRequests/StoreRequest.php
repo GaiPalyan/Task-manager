@@ -5,23 +5,18 @@ declare(strict_types=1);
 namespace App\Http\Requests\TaskRequests;
 
 use App\Http\Requests\BaseRequest;
+use App\Models\Task;
 
 class StoreRequest extends BaseRequest
 {
-    protected array $taskCreateRules = [
-        'name' => ['unique:App\Models\Task,name', 'required'],
-        'status_id' => ['required']
+    private array $rules = [
+        'status_id' => ['required'],
+        'name' => ['unique:' . Task::class]
     ];
 
-    public function rules(): array
+    public function rules(array $rules = []): array
     {
-        foreach ($this->taskCreateRules as $attribute => $rule) {
-            $this->baseRules[$attribute] = array_key_exists($attribute, $this->baseRules)
-                ? array_unique(array_merge($this->baseRules[$attribute], $rule))
-                : $this->baseRules[$attribute] = $rule;
-        }
-
-        return $this->baseRules;
+        return parent::rules($this->rules);
     }
 
     public function messages(): array

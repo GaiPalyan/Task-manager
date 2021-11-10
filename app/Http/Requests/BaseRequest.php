@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class BaseRequest extends FormRequest
 {
-    protected array $baseRules = ['name' => ['required']];
+    private array $rules = ['name' => ['required']];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -16,8 +16,20 @@ class BaseRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
+    private function setRules(array $additionalRules): void
     {
-        return $this->baseRules;
+        foreach ($additionalRules as $attribute => $rule) {
+            $this->rules[$attribute] = array_key_exists($attribute, $this->rules)
+                ? array_unique(array_merge($this->rules[$attribute], $rule))
+                : $this->rules[$attribute] = $rule;
+        }
+    }
+
+    public function rules(array $additionalRules = []): array
+    {
+        if (!empty($additionalRules)) {
+            $this->setRules($additionalRules);
+        }
+        return $this->rules;
     }
 }

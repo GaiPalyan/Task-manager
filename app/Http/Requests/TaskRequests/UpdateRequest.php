@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace App\Http\Requests\TaskRequests;
 
 use App\Http\Requests\BaseRequest;
+use App\Models\Task;
 
 class UpdateRequest extends BaseRequest
 {
-    protected array $taskUpdateRules = [
-        'status_id' => ['required']
+    private array $rules = [
+        'status_id' => ['required'],
+        'name' => ['unique:' . Task::class]
     ];
 
-    public function rules(): array
+    public function rules(array $rules = []): array
     {
-        foreach ($this->taskUpdateRules as $name => $rule) {
-            $this->baseRules[$name] = array_key_exists($name, $this->baseRules)
-                ? array_unique(array_merge($this->baseRules[$name], $rule))
-                : $this->baseRules[$name] = $rule;
-        }
-
-        return $this->baseRules;
+        return parent::rules($this->rules);
     }
 
     public function messages(): array
