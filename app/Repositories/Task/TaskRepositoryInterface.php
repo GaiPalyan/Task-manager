@@ -13,9 +13,9 @@ use Illuminate\Support\Collection;
 
 interface TaskRepositoryInterface
 {
-    public function store(Authenticatable $creator, array $data, TaskStatus $status): void;
+    public function store(Authenticatable $creator, array $inputData, TaskStatus $status): void;
     public function getList(): LengthAwarePaginator;
-    public function update(array $data, Task $task): void;
+    public function update(array $inputData, Task $task): void;
     public function delete(Task $task): void;
     public function getAvailableFilterOptions(): Collection;
     public function getAssignedPerformersList(): Collection;

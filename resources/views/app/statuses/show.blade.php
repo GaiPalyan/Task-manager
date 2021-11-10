@@ -18,7 +18,7 @@
                 <tr>
                     <td>{{$status->id}}</td>
                     <td>{{$status->name}}</td>
-                    <td>{{$status->created_at}}</td>
+                    <td>{{$status->created_at->format('d.m.Y')}}</td>
                     <td>
                             @can('delete', $status)
                                 <a class="btn btn-danger btn-sm ml-2"

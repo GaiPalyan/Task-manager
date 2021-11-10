@@ -52,7 +52,7 @@
                     <td><a href="{{route('tasks.show', $task)}}">{{$task->name}}</a></td>
                     <td>{{optional($task->creator)->name}}</td>
                     <td>{{optional($task->performer)->name}}</td>
-                    <td>{{$task->created_at->format('d M Y')}}</td>
+                    <td>{{$task->created_at->format('d.m.Y')}}</td>
                     <td>
                         @can('update', $task)
                             @can('delete', $task)
