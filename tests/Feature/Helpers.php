@@ -21,4 +21,3 @@ function make($subject)
         default => throw new Exception('Wrong subject'),
     };
 }
-
