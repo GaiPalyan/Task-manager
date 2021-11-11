@@ -43,6 +43,12 @@ class TaskRepository implements TaskRepositoryInterface
               ->getModels();
     }
 
+    public function getPerformers(): array
+    {
+        return User::distinct()
+              ->getModels();
+    }
+
     public function getStatus(Task $task): array
     {
         return $task->status()->getModels();

@@ -38,7 +38,7 @@
                     {{data_get($availableOptions, 'taskPerformer.name', '----------')}}
                 </option>
                     @foreach(data_get($availableOptions, 'performers') as $performer)
-                        <option value="{{$performer->performer_id}}">{{$performer->performer_name}}</option>
+                        <option value="{{$performer->id}}">{{$performer->name}}</option>
                     @endforeach
                 @if(data_get($availableOptions, 'taskPerformer'))
                     <option value="">----------</option>

@@ -35,7 +35,7 @@ class TaskManager
     {
         $labels = $this->labelRepository->getAll();
         $statuses = $this->statusRepository->getAll();
-        $performers = $this->taskRepository->getUniqueAssignedPerformers();
+        $performers = $this->taskRepository->getPerformers();
 
         return compact('labels', 'statuses', 'performers');
     }
@@ -48,8 +48,8 @@ class TaskManager
             static fn($status) => $status->id !== $task->status_id
         );
         $performers = array_filter(
-            $this->taskRepository->getUniqueAssignedPerformers(),
-            static fn($performer) => $performer->performer_id !== $task->assigned_to_id
+            $this->taskRepository->getPerformers(),
+            static fn($performer) => $performer->id !== $task->assigned_to_id
         );
 
         return compact('labels', 'statuses', 'performers');

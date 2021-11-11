@@ -18,4 +18,5 @@ interface TaskRepositoryInterface
     public function getStatus(Task $task): array;
     public function getTaskPerformer(Task $task): array;
     public function getTaskLabels(Task $task): array;
+    public function getPerformers(): array;
 }

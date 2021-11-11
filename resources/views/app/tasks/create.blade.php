@@ -33,7 +33,7 @@
                 <select class="form-control" id="assigned_to_id" name="assigned_to_id">
                     <option selected="selected" value="">----------</option>
                     @foreach(data_get($creatingOptions, 'performers') as $performer)
-                        <option value="{{$performer->performer_id}}">{{$performer->performer_name}}</option>
+                        <option value="{{$performer->id}}">{{$performer->name}}</option>
                     @endforeach
                 </select>
         </x-form.form-item>
