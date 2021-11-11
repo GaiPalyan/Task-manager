@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Domain;
 
 use App\Models\TaskStatus;
-use App\Repositories\Status\StatusRepositoryInterface;
-use Illuminate\Contracts\Auth\Authenticatable;
 
 class StatusManager
 {
@@ -19,7 +17,8 @@ class StatusManager
 
     public function getStatusList(): array
     {
-        return $this->statusRepository->getList();
+        $statusesList = $this->statusRepository->getList();
+        return compact('statusesList');
     }
 
     public function getStatus(int $id): TaskStatus

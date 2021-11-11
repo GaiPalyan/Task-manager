@@ -7,21 +7,21 @@
                 <form method="GET" class="form-inline" accept-charset="UTF-8" action={{route('tasks.index')}}>
                     <select class="form-control mr-2" name="filter[status_id]">
                             <option selected="selected" value="">@lang('interface.Status')</option>
-                        @foreach(data_get($availableOptions, 'options') as $status)
-                            <option value="{{$status->status_id}}">{{$status->status_name}}</option>
+                        @foreach(data_get($availableOptions, 'statuses') as $status)
+                            <option value="{{$status->id}}">{{$status->name}}</option>
                         @endforeach
                     </select>
                     <select class="form-control mr-2" name="filter[created_by_id]">
                             <option selected="selected" value="">@lang('interface.Author')</option>
-                        @foreach(data_get($availableOptions, 'options') as $creator)
-                            <option value="{{$creator->creator_id}}">{{$creator->creator_name}}</option>
+                        @foreach(data_get($availableOptions, 'creators') as $task)
+                            <option value="{{$task->creator_id}}">{{$task->creator_name}}</option>
                         @endforeach
                     </select>
 
                     <select class="form-control mr-2" name="filter[assigned_to_id]">
                         <option selected="selected" value="">@lang('interface.Performer')</option>
-                        @foreach(data_get($availableOptions, 'performers') as $performer)
-                            <option value="{{$performer->performer_id}}">{{$performer->performer_name}}</option>
+                        @foreach(data_get($availableOptions, 'performers') as $task)
+                            <option value="{{$task->performer_id}}">{{$task->performer_name}}</option>
                         @endforeach
                     </select>
 
@@ -47,7 +47,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($tasks as $task)
+            @foreach($tasksList as $task)
                 <tr>
                     <td>{{$task->id}}</td>
                     <td>{{optional($task->status)->name}}</td>
@@ -72,5 +72,5 @@
             @endforeach
         </tbody>
     </table>
-    {{ $tasks->links() }}
+    {{ $tasksList->links() }}
 @endsection

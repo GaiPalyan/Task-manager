@@ -23,8 +23,7 @@ class LabelController extends Controller
 
     public function index(): View
     {
-        $labels = $this->labelsManager->getLabels();
-        return view('app.labels.show', $labels);
+        return view('app.labels.show', $this->labelsManager->getLabels());
     }
 
     public function create(): View

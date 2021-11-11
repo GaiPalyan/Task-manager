@@ -23,8 +23,7 @@ class StatusController extends Controller
 
     public function index(): View
     {
-        $statuses = $this->statusManager->getStatusList();
-        return view('app.statuses.show', $statuses);
+        return view('app.statuses.show', $this->statusManager->getStatusList());
     }
 
     public function create(): View

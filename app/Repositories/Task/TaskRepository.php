@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Repositories\Task;
 
+use App\Domain\TaskRepositoryInterface;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -29,46 +27,44 @@ class TaskRepository implements TaskRepositoryInterface
             )->paginate(10);
     }
 
-    public function getAvailableFilterOptions(): Collection
+    public function getUniqueTaskCreators(): array
     {
         return Task::join('users as creators', 'tasks.created_by_id', '=', 'creators.id')
-             ->join('task_statuses as statuses', 'tasks.status_id', '=', 'statuses.id')
-             ->selectRaw('creators.id as creator_id, creators.name as creator_name,
-                          statuses.id as status_id, statuses.name as status_name')
-             ->distinct()
-             ->get();
+              ->selectRaw('creators.id as creator_id, creators.name as creator_name')
+              ->distinct()
+              ->getModels();
     }
 
-    public function getAssignedPerformersList(): Collection
+    public function getUniqueAssignedPerformers(): array
     {
         return Task::join('users as performers', 'tasks.assigned_to_id', '=', 'performers.id')
-             ->selectRaw('performers.id as performer_id, performers.name as performer_name')
-             ->distinct()
-             ->get();
+              ->selectRaw('performers.id as performer_id, performers.name as performer_name')
+              ->distinct()
+              ->getModels();
     }
 
-    public function getStatus(Task $task): TaskStatus | BelongsTo
+    public function getStatus(Task $task): array
     {
-        return $task->status()->firstOrFail();
+        return $task->status()->getModels();
     }
 
-    public function getTaskPerformer(Task $task): User | BelongsTo
+    public function getTaskPerformer(Task $task): array
     {
-        return $task->performer()->firstOrFail();
+        return $task->performer()->getModels();
     }
 
-    public function getTaskLabels(Task $task): Collection
+    public function getTaskLabels(Task $task): array
     {
-        return $task->labels()->get();
+        return $task->labels()->getModels();
     }
 
-    public function store(Authenticatable $creator, array $inputData, TaskStatus $status): void
+    public function store(User $creator, array $inputData, TaskStatus $status): void
     {
         $task = User::findOrFail($creator->getAuthIdentifier())
-            ->task()
-            ->make($inputData)
-            ->status()
-            ->associate($status);
+              ->task()
+              ->make($inputData)
+              ->status()
+              ->associate($status);
         $task->save();
 
         if (isset($inputData['labels'])) {

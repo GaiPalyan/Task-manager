@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain;
 
 use App\Models\Label;
-use App\Repositories\Label\LabelRepositoryInterface;
 
 class LabelsManager
 {
@@ -18,7 +17,8 @@ class LabelsManager
 
     public function getLabels(): array
     {
-        return $this->labelsRepository->getList();
+        $labelsList = $this->labelsRepository->getList();
+        return compact('labelsList');
     }
 
     public function saveLabel(array $inputData): void

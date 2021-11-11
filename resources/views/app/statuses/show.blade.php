@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($statuses as $status)
+            @foreach($statusesList as $status)
                 <tr>
                     <td>{{$status->id}}</td>
                     <td>{{$status->name}}</td>
@@ -36,5 +36,5 @@
             @endforeach
         </tbody>
     </table>
-    {{ $statuses->links() }}
+    {{ $statusesList->links() }}
 @endsection

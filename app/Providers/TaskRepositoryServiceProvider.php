@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Repositories\Task\TaskRepository;
-use App\Repositories\Task\TaskRepositoryInterface;
+use App\Domain\TaskRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class TaskRepositoryServiceProvider extends ServiceProvider

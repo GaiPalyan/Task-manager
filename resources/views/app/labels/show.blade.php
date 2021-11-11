@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($labels as $label)
+        @foreach($labelsList as $label)
             <tr>
                 <td>{{$label->id}}</td>
                 <td>{{$label->name}}</td>
@@ -39,4 +39,5 @@
         @endforeach
         </tbody>
     </table>
+    {{$labelsList->links()}}
 @endsection

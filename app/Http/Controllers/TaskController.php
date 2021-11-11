@@ -8,6 +8,7 @@ use App\Domain\TaskManager;
 use App\Http\Requests\TaskRequests\StoreRequest;
 use App\Http\Requests\TaskRequests\UpdateRequest;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -24,8 +25,11 @@ class TaskController extends Controller
     public function index(): View
     {
         $availableOptions = $this->taskManager->getFilterOptions();
-        $tasks = $this->taskManager->getTaskList();
-        return view('app.tasks.show', compact('tasks', 'availableOptions'));
+        return view(
+            'app.tasks.show',
+            compact('availableOptions'),
+            $this->taskManager->getTaskList()
+        );
     }
 
     public function create(): View
@@ -36,7 +40,12 @@ class TaskController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $this->taskManager->saveTask($request->all(), auth()->user());
+        $user = auth()->user();
+        if (!$user instanceof User) {
+            abort(404);
+        }
+
+        $this->taskManager->saveTask($request->all(), $user);
         flash(__('flash-messages.taskWasCreated'))->success();
 
         return redirect()->route('tasks.index');

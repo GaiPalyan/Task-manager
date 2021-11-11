@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Repositories\Label;
 
+use App\Domain\LabelRepositoryInterface;
 use App\Models\Label;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class LabelRepository implements LabelRepositoryInterface
 {
 
-    public function getList(): array
+    public function getList(): LengthAwarePaginator
     {
-        $labels = Label::select('*')->orderByDesc('created_at')->paginate(10);
-        return compact('labels');
+        return Label::select('*')->orderByDesc('created_at')->paginate(10);
     }
 
-    public function getUniqueNamedList(): Collection
+    public function getAll(): array
     {
-        return Label::distinct('name')->get();
+        return Label::getModels();
     }
 
     public function store(array $data): void

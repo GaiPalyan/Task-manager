@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\Repositories\Status;
 
+use App\Domain\StatusRepositoryInterface;
 use App\Models\TaskStatus;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class StatusRepository implements StatusRepositoryInterface
 {
 
-    public function getList(): array
+    public function getList(): LengthAwarePaginator
     {
-        $statuses = TaskStatus::select('id', 'name', 'created_at')->orderByDesc('created_at')->paginate(10);
-        return compact('statuses');
+        return TaskStatus::select('id', 'name', 'created_at')
+                           ->orderByDesc('created_at')
+                           ->paginate(10);
     }
 
-    public function getAll(): Collection
+    public function getAll(): array
     {
-        return TaskStatus::all();
+        return TaskStatus::getModels();
     }
 
     public function store(array $name): void
@@ -28,7 +30,7 @@ class StatusRepository implements StatusRepositoryInterface
 
     public function getStatusById(int $id): TaskStatus
     {
-        return TaskStatus::findOrFail($id);
+        return TaskStatus::find($id);
     }
 
     public function update(array $data, TaskStatus $status): void
