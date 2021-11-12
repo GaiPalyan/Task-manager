@@ -46,7 +46,7 @@ class TaskStatusTest extends TestCase
         $status = make(TaskStatus::class)->create();
         $this->delete(route('task_statuses.destroy', $status))
              ->assertStatus(403);
-        $this->assertDatabaseHas('task_statuses', $status->only('id'));
+        $this->assertDatabaseHas('task_statuses', ['id' => $status->only('id')]);
     }
 
     /* ------ Test actions as user ------- */

@@ -21,7 +21,7 @@ class StatusManager
         return compact('statusesList');
     }
 
-    public function getStatus(int $id): TaskStatus
+    public function getStatus(int $id): ?TaskStatus
     {
         return $this->statusRepository->getStatusById($id);
     }

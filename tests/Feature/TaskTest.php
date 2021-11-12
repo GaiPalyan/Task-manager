@@ -52,7 +52,7 @@ class TaskTest extends TestCase
         $task = make(Task::class)->create();
         $this->delete(route('tasks.destroy', $task))
             ->assertStatus(403);
-        $this->assertModelExists($task);
+        $this->assertDatabaseHas('tasks', ['id' => $task->only('id')]);
     }
 
 /* ---------- test actions as user ------------------ */
@@ -66,9 +66,10 @@ class TaskTest extends TestCase
 
     public function testStoreAsUser(): void
     {
+        $status = make(TaskStatus::class)->create();
         $task = make(Task::class)->make([
-                'status_id' => make(TaskStatus::class)->create()->getAttribute('id'),
-                'created_by_id' => $this->user->id,
+                'status_id' => $status->getAttribute('id'),
+                'created_by_id' => $this->user->getAttribute('id'),
             ])->toArray();
 
         $this->actingAs($this->user)
@@ -80,8 +81,9 @@ class TaskTest extends TestCase
 
     public function testUpdateAsUser(): void
     {
+        $status = make(TaskStatus::class)->create();
         $newData = make(Task::class)->make([
-            'status_id' => make(TaskStatus::class)->create()->getAttribute('id')
+            'status_id' => $status->getAttribute('id')
         ])->toArray();
         $task = make(Task::class)->create();
 
@@ -96,11 +98,11 @@ class TaskTest extends TestCase
     public function testDeleteUserTask(): void
     {
         $task = make(Task::class)->create([
-            'created_by_id' => $this->user->id
+            'created_by_id' => $this->user->getAttribute('id')
         ]);
-        $this->assertDatabaseHas('tasks', ['name' => $task->name]);
+        $this->assertDatabaseHas('tasks', ['name' => $task->only('name')]);
         $this->actingAs($this->user)
-             ->assertAuthenticatedAs($this->user)
+             ->assertAuthenticated()
              ->delete(route('tasks.destroy', $task))
              ->assertRedirect();
 
@@ -110,12 +112,12 @@ class TaskTest extends TestCase
     public function testDeleteNotUserTask(): void
     {
         $task = make(Task::class)->create();
-        $this->assertDatabaseHas('tasks', ['name' => $task->name]);
+        $this->assertDatabaseHas('tasks', ['name' => $task->only('name')]);
         $this->actingAs($this->user)
-            ->assertAuthenticatedAs($this->user)
+            ->assertAuthenticated()
             ->delete(route('tasks.destroy', $task))
             ->assertStatus(403);
 
-        $this->assertDatabaseHas('tasks', ['name' => $task->name]);
+        $this->assertDatabaseHas('tasks', ['name' => $task->only('name')]);
     }
 }

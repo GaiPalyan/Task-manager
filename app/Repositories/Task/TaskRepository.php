@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Repositories\Task;
 
 use App\Domain\TaskRepositoryInterface;
+use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
+use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -48,11 +50,19 @@ class TaskRepository implements TaskRepositoryInterface
         return User::pluck('name', 'id')->toArray();
     }
 
+    /**
+     * @throws Exception
+     */
     public function getRelatedData(Task $task, string $relation): array
     {
-        return $task->$relation()
-              ->pluck('name', 'id')
-              ->toArray();
+        $result = match ($relation) {
+            TaskStatus::class => $task->status(),
+            Label::class => $task->labels(),
+            User::class => $task->performer(),
+            default => throw new Exception('Undefined relation'),
+        };
+
+        return $result->pluck('name', 'id')->toArray();
     }
 
     public function store(User $creator, array $inputData, TaskStatus $status): void

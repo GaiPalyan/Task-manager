@@ -45,7 +45,7 @@ class LabelTest extends TestCase
         $label = make(Label::class)->create();
         $this->delete(route('labels.destroy', $label))
              ->assertStatus(403);
-        $this->assertDatabaseHas('labels', $label->only('id'));
+        $this->assertDatabaseHas('labels', ['id' => $label->only('id')]);
     }
 
     /* ------ Test actions as user ------- */

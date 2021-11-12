@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
+use App\Models\Label;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use App\Models\User;
 
 class TaskManager
@@ -42,9 +44,9 @@ class TaskManager
 
     public function getTaskRelatedData(Task $task): array
     {
-        $taskStatus = $this->taskRepository->getRelatedData($task, 'status');
-        $taskLabels = $this->taskRepository->getRelatedData($task, 'labels');
-        $taskPerformer = $this->taskRepository->getRelatedData($task, 'performer');
+        $taskStatus = $this->taskRepository->getRelatedData($task, TaskStatus::class);
+        $taskLabels = $this->taskRepository->getRelatedData($task, Label::class);
+        $taskPerformer = $this->taskRepository->getRelatedData($task, User::class);
 
         return compact('taskStatus', 'taskLabels', 'taskPerformer', 'task');
     }
