@@ -18,9 +18,9 @@ class StatusRepository implements StatusRepositoryInterface
                            ->paginate(10);
     }
 
-    public function getAll(): array
+    public function getFormOptions(): array
     {
-        return TaskStatus::getModels();
+        return TaskStatus::pluck('name', 'id')->toArray();
     }
 
     public function store(array $name): void
@@ -28,7 +28,7 @@ class StatusRepository implements StatusRepositoryInterface
         TaskStatus::create($name);
     }
 
-    public function getStatusById(int $id): TaskStatus
+    public function getStatusById(int $id): ?TaskStatus
     {
         return TaskStatus::find($id);
     }
@@ -39,12 +39,8 @@ class StatusRepository implements StatusRepositoryInterface
         $status->save();
     }
 
-    public function delete(TaskStatus $status)
+    public function delete(TaskStatus $status): void
     {
-        try {
-            $status->delete();
-        } catch (\Exception $exception) {
-            return $exception->getCode();
-        }
+        $status->delete();
     }
 }

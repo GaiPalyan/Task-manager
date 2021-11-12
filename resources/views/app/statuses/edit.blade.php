@@ -5,7 +5,7 @@
     <x-form.form method="patch" class="w-50" action="{{ route('task_statuses.update', $status) }}">
 
         <x-form.form-item>
-            <x-name-form-field />
+            <x-name-form-field value="{{$status->name}}"/>
         </x-form.form-item>
 
         <x-form.submit value="{{__('interface.Update btn')}}"/>

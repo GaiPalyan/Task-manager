@@ -17,8 +17,8 @@
             <label for="status_id">@lang('interface.Status')*</label>
                 <select class="form-control @error('status_id') is-invalid @enderror" id="status_id" name="status_id">
                     <option selected="selected" value="">----------</option>
-                    @foreach(data_get($creatingOptions, 'statuses') as $status)
-                        <option value="{{$status->id}}">{{$status->name}}</option>
+                    @foreach($statuses as $id => $name)
+                        <option value="{{$id}}">{{$name}}</option>
                     @endforeach
                 </select>
                 @error('status_id')
@@ -32,8 +32,8 @@
             <label for="assigned_to_id">@lang('interface.Performer')</label>
                 <select class="form-control" id="assigned_to_id" name="assigned_to_id">
                     <option selected="selected" value="">----------</option>
-                    @foreach(data_get($creatingOptions, 'performers') as $performer)
-                        <option value="{{$performer->id}}">{{$performer->name}}</option>
+                    @foreach($performers as $id => $name)
+                        <option value="{{$id}}">{{$name}}</option>
                     @endforeach
                 </select>
         </x-form.form-item>
@@ -41,8 +41,8 @@
         <x-form.form-item>
             <label for="labels">@lang('interface.Labels')</label>
                 <select class="form-control" multiple="" name="labels[]">
-                    @foreach(data_get($creatingOptions, 'labels') as $label)
-                    <option value="{{$label->id}}">{{$label->name}}</option>
+                    @foreach($labels as $id => $name)
+                    <option value="{{$id}}">{{$name}}</option>
                     @endforeach
                 </select>
         </x-form.form-item>

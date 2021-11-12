@@ -13,10 +13,8 @@ interface TaskRepositoryInterface
     public function getList(): LengthAwarePaginator;
     public function update(array $inputData, Task $task): void;
     public function delete(Task $task): void;
-    public function getUniqueTaskCreators(): array;
-    public function getUniqueAssignedPerformers(): array;
-    public function getStatus(Task $task): array;
-    public function getTaskPerformer(Task $task): array;
-    public function getTaskLabels(Task $task): array;
-    public function getPerformers(): array;
+    public function getCreators(): array;
+    public function getAssignedPerformers(): array;
+    public function getRelatedData(Task $task, string $relation): array;
+    public function getAvailablePerformers(): array;
 }

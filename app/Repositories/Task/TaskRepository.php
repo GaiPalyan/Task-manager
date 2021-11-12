@@ -27,50 +27,42 @@ class TaskRepository implements TaskRepositoryInterface
             )->paginate(10);
     }
 
-    public function getUniqueTaskCreators(): array
+    public function getCreators(): array
     {
         return Task::join('users as creators', 'tasks.created_by_id', '=', 'creators.id')
-              ->selectRaw('creators.id as creator_id, creators.name as creator_name')
-              ->distinct()
-              ->getModels();
+              ->selectRaw('creators.id, creators.name')
+              ->pluck('name', 'id')
+              ->toArray();
     }
 
-    public function getUniqueAssignedPerformers(): array
+    public function getAssignedPerformers(): array
     {
         return Task::join('users as performers', 'tasks.assigned_to_id', '=', 'performers.id')
-              ->selectRaw('performers.id as performer_id, performers.name as performer_name')
-              ->distinct()
-              ->getModels();
+              ->selectRaw('performers.id, performers.name')
+              ->pluck('name', 'id')
+              ->toArray();
     }
 
-    public function getPerformers(): array
+    public function getAvailablePerformers(): array
     {
-        return User::distinct()
-              ->getModels();
+        return User::pluck('name', 'id')->toArray();
     }
 
-    public function getStatus(Task $task): array
+    public function getRelatedData(Task $task, string $relation): array
     {
-        return $task->status()->getModels();
-    }
-
-    public function getTaskPerformer(Task $task): array
-    {
-        return $task->performer()->getModels();
-    }
-
-    public function getTaskLabels(Task $task): array
-    {
-        return $task->labels()->getModels();
+        return $task->$relation()
+              ->pluck('name', 'id')
+              ->toArray();
     }
 
     public function store(User $creator, array $inputData, TaskStatus $status): void
     {
-        $task = User::findOrFail($creator->getAuthIdentifier())
+        $task = User::find($creator->id)
               ->task()
               ->make($inputData)
               ->status()
               ->associate($status);
+
         $task->save();
 
         if (isset($inputData['labels'])) {

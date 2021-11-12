@@ -16,9 +16,9 @@ class LabelRepository implements LabelRepositoryInterface
         return Label::select('*')->orderByDesc('created_at')->paginate(10);
     }
 
-    public function getAll(): array
+    public function getFormOptions(): array
     {
-        return Label::getModels();
+        return Label::pluck('name', 'id')->toArray();
     }
 
     public function store(array $data): void

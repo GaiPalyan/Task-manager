@@ -25,42 +25,28 @@ class TaskManager
 
     public function getFilterOptions(): array
     {
-        $creators = $this->taskRepository->getUniqueTaskCreators();
-        $performers = $this->taskRepository->getUniqueAssignedPerformers();
-        $statuses = $this->statusRepository->getAll();
+        $creators = $this->taskRepository->getCreators();
+        $performers = $this->taskRepository->getAssignedPerformers();
+        $statuses = $this->statusRepository->getFormOptions();
         return compact('creators', 'performers', 'statuses');
     }
 
-    public function getCreatingOptions(): array
+    public function getOptions(): array
     {
-        $labels = $this->labelRepository->getAll();
-        $statuses = $this->statusRepository->getAll();
-        $performers = $this->taskRepository->getPerformers();
-
-        return compact('labels', 'statuses', 'performers');
-    }
-
-    public function getUpdatingOptions(Task $task): array
-    {
-        $labels = $this->labelRepository->getAll();
-        $statuses = array_filter(
-            $this->statusRepository->getAll(),
-            static fn($status) => $status->id !== $task->status_id
-        );
-        $performers = array_filter(
-            $this->taskRepository->getPerformers(),
-            static fn($performer) => $performer->id !== $task->assigned_to_id
-        );
+        $labels = $this->labelRepository->getFormOptions();
+        $statuses = $this->statusRepository->getFormOptions();
+        $performers = $this->taskRepository->getAvailablePerformers();
 
         return compact('labels', 'statuses', 'performers');
     }
 
     public function getTaskRelatedData(Task $task): array
     {
-        $taskStatus = head($this->taskRepository->getStatus($task));
-        $taskLabels = $this->taskRepository->getTaskLabels($task);
-        $taskPerformer = head($this->taskRepository->getTaskPerformer($task));
-        return compact('taskStatus', 'taskLabels', 'taskPerformer');
+        $taskStatus = $this->taskRepository->getRelatedData($task, 'status');
+        $taskLabels = $this->taskRepository->getRelatedData($task, 'labels');
+        $taskPerformer = $this->taskRepository->getRelatedData($task, 'performer');
+
+        return compact('taskStatus', 'taskLabels', 'taskPerformer', 'task');
     }
 
     public function getTaskList(): array

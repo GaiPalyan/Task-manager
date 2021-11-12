@@ -12,6 +12,6 @@ interface LabelRepositoryInterface
     public function getList(): LengthAwarePaginator;
     public function store(array $data): void;
     public function update(array $data, Label $label): void;
-    public function getAll(): array;
+    public function getFormOptions(): array;
     public function delete(Label $label): void;
 }

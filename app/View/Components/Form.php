@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class Form extends Component
 {
@@ -20,7 +21,7 @@ class Form extends Component
     /**
      * Get the view / contents that represent the component.
      */
-    public function render()
+    public function render(): View
     {
         return view('components.form');
     }

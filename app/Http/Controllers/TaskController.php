@@ -24,18 +24,16 @@ class TaskController extends Controller
 
     public function index(): View
     {
-        $availableOptions = $this->taskManager->getFilterOptions();
         return view(
-            'app.tasks.show',
-            compact('availableOptions'),
-            $this->taskManager->getTaskList()
+            'app.tasks.index',
+            $this->taskManager->getTaskList(),
+            $this->taskManager->getFilterOptions(),
         );
     }
 
     public function create(): View
     {
-        $creatingOptions = $this->taskManager->getCreatingOptions();
-        return view('app.tasks.create', compact('creatingOptions'));
+        return view('app.tasks.create', $this->taskManager->getOptions());
     }
 
     public function store(StoreRequest $request): RedirectResponse
@@ -53,18 +51,19 @@ class TaskController extends Controller
 
     public function show(Task $task): View
     {
-        $taskData = $this->taskManager->getTaskRelatedData($task);
-        return view('app.tasks.task_page', compact('task', 'taskData'));
+        return view(
+            'app.tasks.show',
+            $this->taskManager->getTaskRelatedData($task)
+        );
     }
 
     public function edit(Task $task): View
     {
-        $availableOptions = array_merge(
-            $this->taskManager->getUpdatingOptions($task),
+        return view(
+            'app.tasks.edit',
+            $this->taskManager->getOptions(),
             $this->taskManager->getTaskRelatedData($task)
         );
-
-        return view('app.tasks.edit', compact('task', 'availableOptions'));
     }
 
     public function update(UpdateRequest $request, Task $task): RedirectResponse

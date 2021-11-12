@@ -105,6 +105,6 @@ class TaskStatusTest extends TestCase
         $this->get(route('task_statuses.index'))
             ->assertSeeText('Не удалось удалить статус');
 
-        $this->assertDatabaseHas('task_statuses', $status->only('id'));
+        $this->assertDatabaseHas('task_statuses', ['id' => $status->only('id')]);
     }
 }

@@ -27,9 +27,10 @@ class BaseRequest extends FormRequest
 
     public function rules(array $additionalRules = []): array
     {
-        if (!empty($additionalRules)) {
+        if (filled($additionalRules)) {
             $this->setRules($additionalRules);
         }
+
         return $this->rules;
     }
 }

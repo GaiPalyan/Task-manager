@@ -50,7 +50,7 @@ class LabelTest extends TestCase
 
     /* ------ Test actions as user ------- */
 
-    public function testStoreAsUser()
+    public function testStoreAsUser(): void
     {
         $label = make(Label::class)->make()->toArray();
         $this->actingAs($this->user)
