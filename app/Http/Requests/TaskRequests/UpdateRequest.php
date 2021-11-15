@@ -6,7 +6,7 @@ namespace App\Http\Requests\TaskRequests;
 
 use App\Http\Requests\BaseRequest;
 
-class UpdateRequest extends BaseRequest
+final class UpdateRequest extends BaseRequest
 {
     private array $rules = [
         'status_id' => ['required'],

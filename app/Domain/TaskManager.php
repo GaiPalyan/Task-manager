@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
+use App\Http\Requests\TaskRequests\TaskRequestData;
 use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
@@ -57,10 +58,10 @@ class TaskManager
         return compact('tasksList');
     }
 
-    public function saveTask(array $inputData, User $creator): void
+    public function saveTask(TaskRequestData $inputData, User $creator): void
     {
-        $status = $this->statusRepository->getStatusById((int) $inputData['status_id']);
-        $this->taskRepository->store($creator, $inputData, $status);
+        $status = $this->statusRepository->getStatus($inputData->getTaskStatusId());
+        $this->taskRepository->store($creator, $inputData->toArray(), $status);
     }
 
     public function updateTask(array $inputData, Task $task): void

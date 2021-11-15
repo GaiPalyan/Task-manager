@@ -17,6 +17,7 @@
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
         "rollbar/rollbar-laravel": "^7.0",
+        "spatie/data-transfer-object": "^3.7",
         "spatie/laravel-query-builder": "^4.0"
     },
     "require-dev": {

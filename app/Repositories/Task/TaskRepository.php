@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories\Task;
 
 use App\Domain\TaskRepositoryInterface;
+use App\Http\Requests\TaskRequests\TaskRequestData;
 use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
@@ -67,7 +68,7 @@ class TaskRepository implements TaskRepositoryInterface
 
     public function store(User $creator, array $inputData, TaskStatus $status): void
     {
-        $task = User::find($creator->id)
+        $task = User::find($creator->getAttribute('id'))
               ->task()
               ->make($inputData)
               ->status()

@@ -7,7 +7,7 @@ namespace App\Http\Requests\StatusRequests;
 use App\Http\Requests\BaseRequest;
 use App\Models\TaskStatus;
 
-class StoreRequest extends BaseRequest
+final class StoreRequest extends BaseRequest
 {
     private array $rules = ['name' => ['unique:' . TaskStatus::class]];
 

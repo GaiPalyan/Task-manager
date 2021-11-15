@@ -8,7 +8,7 @@
             </a>
     </h1>
             <p>@lang('interface.Name'): {{$task->name}}</p>
-            <p>@lang('interface.Status'): {{$task->status->name}}</p>
+            <p>@lang('interface.Status'): {{head($taskStatus)}}</p>
             <p>@lang('interface.Description'): {{$task->description}}</p>
             <p>@lang('interface.Labels'):</p>
                 <ul>

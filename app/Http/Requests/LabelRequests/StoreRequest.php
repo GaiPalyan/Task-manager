@@ -5,7 +5,7 @@ namespace App\Http\Requests\LabelRequests;
 use App\Http\Requests\BaseRequest;
 use App\Models\Label;
 
-class StoreRequest extends BaseRequest
+final class StoreRequest extends BaseRequest
 {
     private array $rules = ['name' => ['unique:' . Label::class]];
 

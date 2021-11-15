@@ -28,7 +28,7 @@ class StatusRepository implements StatusRepositoryInterface
         TaskStatus::create($name);
     }
 
-    public function getStatusById(int $id): TaskStatus
+    public function getStatus(int $id): TaskStatus
     {
         return TaskStatus::findOrFail($id);
     }

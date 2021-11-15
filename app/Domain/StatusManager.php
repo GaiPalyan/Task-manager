@@ -23,7 +23,7 @@ class StatusManager
 
     public function getStatus(int $id): ?TaskStatus
     {
-        return $this->statusRepository->getStatusById($id);
+        return $this->statusRepository->getStatus($id);
     }
 
     public function saveStatus(array $inputData): void
