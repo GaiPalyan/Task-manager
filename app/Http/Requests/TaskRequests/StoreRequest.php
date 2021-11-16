@@ -27,14 +27,14 @@ final class StoreRequest extends BaseRequest
         return $baseMessageBag;
     }
 
-    public function inputData()
+    public function inputData(): TaskRequestData
     {
-        return new TaskRequestData([
-            'name' => (string) $this->input('name'),
-            'description' => (string) $this->input('description') ?: null,
-            'status_id' => (int) $this->input('status_id'),
-            'assigned_to_id' => (int) $this->input('assigned_to_id') ?: null,
-            'labels' => (array) $this->input('labels'),
-        ]);
+        return new TaskRequestData(
+            (string) $this->input('name'),
+            (int) $this->input('status_id'),
+            (array) $this->input('labels'),
+            (string) $this->input('description') ?: null,
+            (int) $this->input('assigned_to_id') ?: null,
+        );
     }
 }

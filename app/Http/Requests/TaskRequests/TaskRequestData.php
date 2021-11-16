@@ -4,15 +4,27 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\TaskRequests;
 
-use Spatie\DataTransferObject\DataTransferObject;
-
-class TaskRequestData extends DataTransferObject
+class TaskRequestData
 {
-    public string $name;
-    public string|null $description;
-    public int $status_id;
-    public int|null $assigned_to_id;
-    public array $labels;
+    private string $name;
+    private string|null $description;
+    private int $statusId;
+    private int|null $assignedId;
+    private array $labels;
+
+    public function __construct(
+        string $name,
+        int $statusId,
+        array $labels,
+        string $description = null,
+        int $assignedToId = null
+    ) {
+        $this->name = $name;
+        $this->statusId = $statusId;
+        $this->labels = $labels;
+        $this->description = $description;
+        $this->assignedId = $assignedToId;
+    }
 
     public function getTaskName(): string
     {
@@ -26,16 +38,27 @@ class TaskRequestData extends DataTransferObject
 
     public function getTaskStatusId(): int
     {
-        return $this->status_id;
+        return $this->statusId;
     }
 
     public function getPerformerId(): int|null
     {
-        return $this->assigned_to_id;
+        return $this->assignedId;
     }
 
     public function getLabels(): array
     {
         return $this->labels;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'status_id' => $this->statusId,
+            'assigned_to_id' => $this->assignedId,
+            'labels' => $this->labels
+        ];
     }
 }
