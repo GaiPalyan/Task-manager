@@ -43,7 +43,7 @@ class TaskController extends Controller
             abort(404);
         }
 
-        $this->taskManager->saveTask($request->inputData(), $user);
+        $this->taskManager->saveTask($request->all(), $user);
         flash(__('flash-messages.taskWasCreated'))->success();
 
         return redirect()->route('tasks.index');

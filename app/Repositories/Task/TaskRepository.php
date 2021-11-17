@@ -73,7 +73,8 @@ class TaskRepository implements TaskRepositoryInterface
         $task->fill($requestData);
         $task->save();
 
-        if (filled($requestData['labels'])) {
+        dd($requestData);
+        if (isset($requestData['labels'])) {
             $task->labels()->attach($requestData['labels']);
         }
     }

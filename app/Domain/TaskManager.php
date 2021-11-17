@@ -58,10 +58,10 @@ class TaskManager
         return compact('tasksList');
     }
 
-    public function saveTask(TaskRequestData $requestData, User $creator): void
+    public function saveTask(array $requestData, User $creator): void
     {
-        $status = $this->statusRepository->getStatus($requestData->getTaskStatusId());
-        $this->taskRepository->store($creator, $requestData->toArray(), $status);
+        $status = $this->statusRepository->getStatus((int)$requestData['status_id']);
+        $this->taskRepository->store($creator, $requestData, $status);
     }
 
     public function updateTask(TaskRequestData $requestData, Task $task): void
