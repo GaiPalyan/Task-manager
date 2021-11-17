@@ -37,7 +37,6 @@ class TaskController extends Controller
 
     public function store(TaskRequestValidator $request): RedirectResponse
     {
-
         $user = auth()->user();
         if (!$user instanceof User) {
             abort(404);
