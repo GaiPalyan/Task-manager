@@ -68,7 +68,7 @@ class TaskTest extends TestCase
     {
         $status = make(TaskStatus::class)->create();
         $task = make(Task::class)->make([
-                'status_id' => $status->getAttribute('id'),
+                'status_id' => $status->id,
                 'created_by_id' => $this->user->getAttribute('id'),
             ])->toArray();
 
@@ -85,7 +85,7 @@ class TaskTest extends TestCase
         $status = make(TaskStatus::class)->create();
         $newData = [
             'name' => 'New name',
-            'status_id' => $status->getAttribute('id')
+            'status_id' => $status->id
         ];
 
         $task = make(Task::class)->create();

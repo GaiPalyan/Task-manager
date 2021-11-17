@@ -24,10 +24,10 @@ class LabelTest extends TestCase
 
     public function testStoreAsGuest(): void
     {
-        $status = make(Label::class)->make()->toArray();
-        $this->post(route('labels.store', $status))
+        $label = make(Label::class)->make()->toArray();
+        $this->post(route('labels.store', $label))
             ->assertStatus(403);
-        $this->assertDatabaseMissing('labels', $status);
+        $this->assertDatabaseMissing('labels', $label);
     }
 
     public function testUpdateAsGuest(): void
@@ -88,7 +88,7 @@ class LabelTest extends TestCase
         $this->get(route('labels.index'))
              ->assertSeeText('Метка успешно удалена');
 
-        $this->assertDeleted($label);
+        $this->assertDatabaseMissing('labels', ['name' => $label->only('name')]);
     }
 
     public function testDeleteLabelAttachedWithTheTask(): void
@@ -103,6 +103,6 @@ class LabelTest extends TestCase
         $this->get(route('labels.index'))
              ->assertSeeText('Не удалось удалить метку');
 
-        $this->assertDatabaseHas('labels', $label->only('id'));
+        $this->assertDatabaseHas('labels', ['name' => $label->only('name')]);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\View\Components;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Form extends Component
@@ -19,9 +20,11 @@ class Form extends Component
 
     /**
      * Get the view / contents that represent the component.
+     * 
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
-        //return view('components.form.form');
+        return view('components.form.form');
     }
 }
