@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
+use App\Http\Requests\StatusRequests\StatusRequestData;
 use App\Models\TaskStatus;
 
 class StatusManager
@@ -26,14 +27,14 @@ class StatusManager
         return $this->statusRepository->getStatus($id);
     }
 
-    public function saveStatus(array $inputData): void
+    public function saveStatus(StatusRequestData $inputData): void
     {
-        $this->statusRepository->store($inputData);
+        $this->statusRepository->store($inputData->toArray());
     }
 
-    public function updateStatus(array $inputData, TaskStatus $status): void
+    public function updateStatus(StatusRequestData $inputData, TaskStatus $status): void
     {
-        $this->statusRepository->update($inputData, $status);
+        $this->statusRepository->update($inputData->toArray(), $status);
     }
 
     public function deleteStatus(TaskStatus $status): void

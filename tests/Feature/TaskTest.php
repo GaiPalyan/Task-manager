@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Task;
 use App\Models\TaskStatus;
-use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
@@ -60,6 +59,7 @@ class TaskTest extends TestCase
     public function testCreateAsUser(): void
     {
         $this->actingAs($this->user)
+             ->assertAuthenticated()
              ->get(route('tasks.create'))
              ->assertOk();
     }
@@ -74,6 +74,7 @@ class TaskTest extends TestCase
 
         $this->actingAs($this->user)
              ->post(route('tasks.store', $task))
+             ->assertRedirect(route('tasks.index'))
              ->assertSessionHasNoErrors()
              ->assertRedirect(route('tasks.index'));
         $this->assertDatabaseHas('tasks', $task);
@@ -82,12 +83,15 @@ class TaskTest extends TestCase
     public function testUpdateAsUser(): void
     {
         $status = make(TaskStatus::class)->create();
-        $newData = make(Task::class)->make([
+        $newData = [
+            'name' => 'New name',
             'status_id' => $status->getAttribute('id')
-        ])->toArray();
+        ];
+
         $task = make(Task::class)->create();
 
-        $this->actingAs($this->user)->patch(route('tasks.update', $task), $newData)
+        $result = $this->actingAs($this->user)
+             ->patch(route('tasks.update', $task), $newData)
              ->assertRedirect(route('tasks.index'))
              ->assertSessionHasNoErrors();
         $this->assertDatabaseHas('tasks', $newData);
@@ -106,7 +110,7 @@ class TaskTest extends TestCase
              ->delete(route('tasks.destroy', $task))
              ->assertRedirect();
 
-        $this->assertDeleted($task);
+        $this->assertDatabaseMissing('tasks', ['name' => $task->only('name')]);
     }
 
     public function testDeleteNotUserTask(): void

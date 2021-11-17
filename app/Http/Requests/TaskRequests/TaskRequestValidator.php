@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\TaskRequests;
 
-use App\Http\Requests\BaseRequest;
+use App\Http\Requests\BaseRequestValidator;
 use App\Models\Task;
+use Illuminate\Support\Facades\Route;
 
-final class StoreRequest extends BaseRequest
+final class TaskRequestValidator extends BaseRequestValidator
 {
 
     private array $rules = [
@@ -17,6 +18,10 @@ final class StoreRequest extends BaseRequest
 
     public function rules(array $rules = []): array
     {
+        if (Route::currentRouteName() === 'tasks.update') {
+            $updateRules = collect($this->rules)->except('name')->toArray();
+            return parent::rules($updateRules);
+        }
         return parent::rules($this->rules);
     }
 
@@ -30,11 +35,11 @@ final class StoreRequest extends BaseRequest
     public function inputData(): TaskRequestData
     {
         return new TaskRequestData(
-            (string) $this->input('name'),
+            $this->input('name'),
             (int) $this->input('status_id'),
-            (array) $this->input('labels'),
-            (string) $this->input('description') ?: null,
-            (int) $this->input('assigned_to_id') ?: null,
+            $this->input('labels'),
+            $this->input('description'),
+            $this->input('assigned_to_id'),
         );
     }
 }

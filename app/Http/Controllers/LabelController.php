@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Domain\LabelsManager;
-use App\Http\Requests\LabelRequests\StoreRequest;
-use App\Http\Requests\LabelRequests\UpdateRequest;
+use App\Http\Requests\LabelRequests\LabelRequestValidator;
+use App\Http\Requests\LabelRequests\UpdateRequestValidator;
 use App\Models\Label;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -31,9 +31,9 @@ class LabelController extends Controller
         return view('app.labels.create');
     }
 
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(LabelRequestValidator $request): RedirectResponse
     {
-        $this->labelsManager->saveLabel($request->all());
+        $this->labelsManager->saveLabel($request->inputData());
         flash(__('flash-messages.labelWasCreated'))->success();
         return redirect()->route('labels.index');
     }
@@ -43,9 +43,9 @@ class LabelController extends Controller
         return view('app.labels.edit', compact('label'));
     }
 
-    public function update(UpdateRequest $request, Label $label): RedirectResponse
+    public function update(LabelRequestValidator $request, Label $label): RedirectResponse
     {
-        $this->labelsManager->updateLabel($request->all(), $label);
+        $this->labelsManager->updateLabel($request->inputData(), $label);
         flash(__('flash-messages.labelWasUpdated'))->success();
         return redirect()->route('labels.index');
     }

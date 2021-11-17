@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BaseRequest extends FormRequest
+class BaseRequestValidator extends FormRequest
 {
     private array $rules = ['name' => ['required']];
 

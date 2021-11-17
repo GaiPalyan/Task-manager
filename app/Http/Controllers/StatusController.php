@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Domain\StatusManager;
-use App\Http\Requests\StatusRequests\StoreRequest;
-use App\Http\Requests\StatusRequests\UpdateRequest;
+use App\Http\Requests\StatusRequests\StatusRequestValidator;
+use App\Http\Requests\StatusRequests\UpdateRequestValidator;
 use App\Models\TaskStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -31,9 +31,9 @@ class StatusController extends Controller
         return view('app.statuses.create');
     }
 
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(StatusRequestValidator $request): RedirectResponse
     {
-        $this->statusManager->saveStatus($request->all());
+        $this->statusManager->saveStatus($request->inputData());
         flash(__('flash-messages.statusWasCreated'))->success();
 
         return redirect()->route('task_statuses.index');
@@ -44,9 +44,9 @@ class StatusController extends Controller
         return  view('app.statuses.edit', compact('status'));
     }
 
-    public function update(UpdateRequest $request, TaskStatus $status): RedirectResponse
+    public function update(StatusRequestValidator $request, TaskStatus $status): RedirectResponse
     {
-        $this->statusManager->updateStatus($request->all(), $status);
+        $this->statusManager->updateStatus($request->inputData(), $status);
         flash(__('flash-messages.statusWasUpdated'))->success();
 
         return redirect()->route('task_statuses.index');

@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Domain\TaskManager;
-use App\Http\Requests\TaskRequests\StoreRequest;
-use App\Http\Requests\TaskRequests\UpdateRequest;
+use App\Http\Requests\TaskRequests\TaskRequestValidator;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -36,8 +35,9 @@ class TaskController extends Controller
         return view('app.tasks.create', $this->taskManager->getOptions());
     }
 
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(TaskRequestValidator $request): RedirectResponse
     {
+
         $user = auth()->user();
         if (!$user instanceof User) {
             abort(404);
@@ -66,9 +66,9 @@ class TaskController extends Controller
         );
     }
 
-    public function update(UpdateRequest $request, Task $task): RedirectResponse
+    public function update(TaskRequestValidator $request, Task $task): RedirectResponse
     {
-        $this->taskManager->updateTask($request->all(), $task);
+        $this->taskManager->updateTask($request->inputData(), $task);
         flash(__('flash-messages.taskWasUpdated'))->success();
         return redirect()->route('tasks.index');
     }

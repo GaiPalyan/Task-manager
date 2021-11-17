@@ -9,9 +9,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface TaskRepositoryInterface
 {
-    public function store(User $creator, array $inputData, TaskStatus $status): void;
+    public function store(User $creator, array $requestData, TaskStatus $status): void;
     public function getList(): LengthAwarePaginator;
-    public function update(array $inputData, Task $task): void;
+    public function update(array $requestData, Task $task): void;
     public function delete(Task $task): void;
     public function getCreators(): array;
     public function getAssignedPerformers(): array;

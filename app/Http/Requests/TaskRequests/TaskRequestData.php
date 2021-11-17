@@ -8,22 +8,22 @@ class TaskRequestData
 {
     private string $name;
     private string|null $description;
-    private int $statusId;
-    private int|null $assignedId;
-    private array $labels;
+    private int $status_id;
+    private string|null $assigned_to_id;
+    private array|null $labels;
 
     public function __construct(
         string $name,
-        int $statusId,
-        array $labels,
+        int $status_id,
+        array $labels = null,
         string $description = null,
-        int $assignedToId = null
+        string $assigned_to_id = null
     ) {
         $this->name = $name;
-        $this->statusId = $statusId;
-        $this->labels = $labels;
+        $this->status_id = $status_id;
+        $this->labels = !is_null($labels) ? array_filter($labels, static fn($label) => $label) : $labels;
         $this->description = $description;
-        $this->assignedId = $assignedToId;
+        $this->assigned_to_id = $assigned_to_id;
     }
 
     public function getTaskName(): string
@@ -38,27 +38,21 @@ class TaskRequestData
 
     public function getTaskStatusId(): int
     {
-        return $this->statusId;
+        return $this->status_id;
     }
 
     public function getPerformerId(): int|null
     {
-        return $this->assignedId;
+        return $this->assigned_to_id;
     }
 
-    public function getLabels(): array
+    public function getLabels(): array|null
     {
         return $this->labels;
     }
 
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'description' => $this->description,
-            'status_id' => $this->statusId,
-            'assigned_to_id' => $this->assignedId,
-            'labels' => $this->labels
-        ];
+        return get_object_vars($this);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
+use App\Http\Requests\LabelRequests\LabelRequestData;
 use App\Models\Label;
 
 class LabelsManager
@@ -21,14 +22,14 @@ class LabelsManager
         return compact('labelsList');
     }
 
-    public function saveLabel(array $inputData): void
+    public function saveLabel(LabelRequestData $inputData): void
     {
-        $this->labelsRepository->store($inputData);
+        $this->labelsRepository->store($inputData->toArray());
     }
 
-    public function updateLabel(array $inputData, Label $label): void
+    public function updateLabel(LabelRequestData $inputData, Label $label): void
     {
-        $this->labelsRepository->update($inputData, $label);
+        $this->labelsRepository->update($inputData->toArray(), $label);
     }
 
     public function deleteLabel(Label $label): void

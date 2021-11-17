@@ -48,9 +48,9 @@
 
                     @foreach($performers as $id => $name)
                         @if($id === $task->assigned_to_id)
-                        <x-default-selected-option value="{{$task->assigned_to_id}}">
-                            {{$name}}
-                        </x-default-selected-option>
+                                <x-default-selected-option value="{{$task->assigned_to_id}}">
+                                    {{$name}}
+                                </x-default-selected-option>
                         @else
                             <option value="{{$id}}">
                                 {{$name}}
@@ -65,10 +65,17 @@
         <x-form.form-item>
             <label for="labels">@lang('interface.Labels')</label>
             <select class="form-control" multiple="" name="labels[]">
+                <option value=""></option>
                 @foreach($labels as $id => $name)
-                <option value="{{$id}}">
-                    {{$name}}
-                </option>
+                        @if(array_key_exists($id, $taskLabels))
+                                <x-default-selected-option value="{{$id}}">
+                                    {{$name}}
+                                </x-default-selected-option>
+                        @else
+                            <option value="{{$id}}">
+                                {{$name}}
+                            </option>
+                        @endif
                 @endforeach
             </select>
         </x-form.form-item>

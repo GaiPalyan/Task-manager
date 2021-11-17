@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories\Task;
 
 use App\Domain\TaskRepositoryInterface;
-use App\Http\Requests\TaskRequests\TaskRequestData;
 use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
@@ -66,29 +65,24 @@ class TaskRepository implements TaskRepositoryInterface
         return $result->pluck('name', 'id')->toArray();
     }
 
-    public function store(User $creator, array $inputData, TaskStatus $status): void
+    public function store(User $creator, array $requestData, TaskStatus $status): void
     {
-        $task = User::find($creator->getAttribute('id'))
-              ->task()
-              ->make($inputData)
-              ->status()
-              ->associate($status);
-
+        $task = new Task();
+        $task->creator()->associate($creator);
+        $task->status()->associate($status);
+        $task->fill($requestData);
         $task->save();
 
-        if (isset($inputData['labels'])) {
-            $task->labels()->attach($inputData['labels']);
+        if (filled($requestData['labels'])) {
+            $task->labels()->attach($requestData['labels']);
         }
     }
 
-    public function update(array $inputData, Task $task): void
+    public function update(array $requestData, Task $task): void
     {
-        $task->fill($inputData);
+        $task->fill($requestData);
         $task->save();
-
-        if (isset($inputData['labels'])) {
-            $task->labels()->sync($inputData['labels']);
-        }
+        $task->labels()->sync($requestData['labels']);
     }
 
     public function delete(Task $task): void

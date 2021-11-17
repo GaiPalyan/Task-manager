@@ -41,6 +41,7 @@
         <x-form.form-item>
             <label for="labels">@lang('interface.Labels')</label>
                 <select class="form-control" multiple="" name="labels[]">
+                    <option value=""></option>
                     @foreach($labels as $id => $name)
                     <option value="{{$id}}">{{$name}}</option>
                     @endforeach
