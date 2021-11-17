@@ -31,7 +31,3 @@ jobs:
         # Run Linter
       - name: Run linter
         run: make lint
-
-        #Run PHPMD
-      - name: Run PHPMD
-        run: phpmd . github phpmd.ruleset.xml --exclude 'tests/*'
