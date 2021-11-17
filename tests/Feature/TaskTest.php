@@ -69,7 +69,7 @@ class TaskTest extends TestCase
         $status = make(TaskStatus::class)->create();
         $task = make(Task::class)->make([
                 'status_id' => $status->id,
-                'created_by_id' => $this->user->getAttribute('id'),
+                'created_by_id' => $this->user->id,
             ])->toArray();
 
         $this->actingAs($this->user)
@@ -102,7 +102,7 @@ class TaskTest extends TestCase
     public function testDeleteUserTask(): void
     {
         $task = make(Task::class)->create([
-            'created_by_id' => $this->user->getAttribute('id')
+            'created_by_id' => $this->user->id
         ]);
         $this->assertDatabaseHas('tasks', ['name' => $task->only('name')]);
         $this->actingAs($this->user)
