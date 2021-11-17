@@ -24,13 +24,13 @@ jobs:
       - name: set up project
         run: make setup
 
-        # Run Linter
-      - name: Run linter
-        run: make lint
-
         # Run tests
       - name: test
         run: make test
+
+        # Run Linter
+      - name: Run linter
+        run: make lint
 
         #Run PHPMD
       - name: Run PHPMD

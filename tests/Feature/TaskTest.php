@@ -90,7 +90,7 @@ class TaskTest extends TestCase
 
         $task = make(Task::class)->create();
 
-        $result = $this->actingAs($this->user)
+        $this->actingAs($this->user)
              ->patch(route('tasks.update', $task), $newData)
              ->assertRedirect(route('tasks.index'))
              ->assertSessionHasNoErrors();
