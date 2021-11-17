@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain;
 
+use App\Http\Requests\TaskRequests\TaskRequestData;
+use App\Models\Label;
 use App\Models\Task;
-use App\Repositories\Label\LabelRepositoryInterface;
-use App\Repositories\Status\StatusRepositoryInterface;
-use App\Repositories\Task\TaskRepositoryInterface;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\TaskStatus;
+use App\Models\User;
 
 class TaskManager
 {
@@ -15,13 +16,11 @@ class TaskManager
     private StatusRepositoryInterface $statusRepository;
     private LabelRepositoryInterface $labelRepository;
 
-    public function __construct
-    (
+    public function __construct(
         TaskRepositoryInterface $taskRepository,
         StatusRepositoryInterface $statusRepository,
         LabelRepositoryInterface $labelRepository,
-    )
-    {
+    ) {
         $this->statusRepository = $statusRepository;
         $this->taskRepository = $taskRepository;
         $this->labelRepository = $labelRepository;
@@ -29,55 +28,45 @@ class TaskManager
 
     public function getFilterOptions(): array
     {
-        $options = $this->taskRepository->getAvailableFilterOptions();
-        $performers = $this->taskRepository->getAssignedPerformersList();
-
-        return compact('options', 'performers');
+        $creators = $this->taskRepository->getCreators();
+        $performers = $this->taskRepository->getAssignedPerformers();
+        $statuses = $this->statusRepository->getFormOptions();
+        return compact('creators', 'performers', 'statuses');
     }
 
-    public function getCreatingOptions(): array
+    public function getOptions(): array
     {
-        $labels = $this->labelRepository->getUniqueNamedList();
-        $statuses = $this->statusRepository->getAll();
-        $performers = $this->taskRepository->getAssignedPerformersList();
+        $labels = $this->labelRepository->getFormOptions();
+        $statuses = $this->statusRepository->getFormOptions();
+        $performers = $this->taskRepository->getAvailablePerformers();
 
         return compact('labels', 'statuses', 'performers');
     }
 
-    public function getUpdatingOptions(Task $task): array
-    {
-        $labels = $this->labelRepository->getUniqueNamedList();
-        $statuses = $this->statusRepository->getAll()
-                    ->reject(fn($status) => $status->id === $task->status_id);
-        $performers = $this->taskRepository->getAssignedPerformersList()
-                    ->reject(fn($performer) => $performer->performer_id === $task->assigned_to_id);
-
-       return compact('labels', 'statuses', 'performers');
-    }
-
     public function getTaskRelatedData(Task $task): array
     {
-        $taskStatus = $this->taskRepository->getStatus($task);
-        $taskLabels = $this->taskRepository->getTaskLabels($task);
-        $taskPerformer = $this->taskRepository->getTaskPerformer($task);
+        $taskStatus = $this->taskRepository->getRelatedData($task, TaskStatus::class);
+        $taskLabels = $this->taskRepository->getRelatedData($task, Label::class);
+        $taskPerformer = $this->taskRepository->getRelatedData($task, User::class);
 
-        return compact('taskStatus', 'taskLabels', 'taskPerformer');
+        return compact('taskStatus', 'taskLabels', 'taskPerformer', 'task');
     }
 
-    public function getTaskList(): LengthAwarePaginator
+    public function getTaskList(): array
     {
-        return $this->taskRepository->getList();
+        $tasksList = $this->taskRepository->getList();
+        return compact('tasksList');
     }
 
-    public function saveTask(array $data, Authenticatable $creator): void
+    public function saveTask(array $requestData, User $creator): void
     {
-        $status = $this->statusRepository->getStatusById($data['status_id']);
-        $this->taskRepository->store($creator, $data, $status);
+        $status = $this->statusRepository->getStatus((int)$requestData['status_id']);
+        $this->taskRepository->store($creator, $requestData, $status);
     }
 
-    public function updateTask(array $data, Task $task): void
+    public function updateTask(TaskRequestData $requestData, Task $task): void
     {
-       $this->taskRepository->update($data, $task);
+        $this->taskRepository->update($requestData->toArray(), $task);
     }
 
     public function deleteTask(Task $task): void

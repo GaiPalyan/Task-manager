@@ -1,24 +1,24 @@
 @extends('layouts.app')
 @section('content')
     @include('flash::message')
-    <h1 class="mb-5">{{ __('Create task') }}</h1>
+    <h1 class="mb-5">@lang('interface.Create task')</h1>
     <x-form.form class="w-50" action="{{ route('tasks.store') }}">
         <x-form.form-item>
-            <label for="name">{{__('Имя')}}</label>
+            <label for="name">@lang('interface.Name')*</label>
             <x-name-form-field />
         </x-form.form-item>
 
         <x-form.form-item>
-            <label for="description">{{__('Описание')}}</label>
+            <label for="description">@lang('interface.Description')</label>
                 <textarea class="form-control" name="description" cols="50" rows="10" id="description"></textarea>
         </x-form.form-item>
 
         <x-form.form-item>
-            <label for="status_id">{{__('Статус')}}</label>
+            <label for="status_id">@lang('interface.Status')*</label>
                 <select class="form-control @error('status_id') is-invalid @enderror" id="status_id" name="status_id">
                     <option selected="selected" value="">----------</option>
-                    @foreach(data_get($creatingOptions, 'statuses') as $status)
-                        <option value="{{$status->id}}">{{$status->name}}</option>
+                    @foreach($statuses as $id => $name)
+                        <option value="{{$id}}">{{$name}}</option>
                     @endforeach
                 </select>
                 @error('status_id')
@@ -29,24 +29,25 @@
         </x-form.form-item>
 
         <x-form.form-item>
-            <label for="assigned_to_id">{{__('Исполнитель')}}</label>
+            <label for="assigned_to_id">@lang('interface.Performer')</label>
                 <select class="form-control" id="assigned_to_id" name="assigned_to_id">
                     <option selected="selected" value="">----------</option>
-                    @foreach(data_get($creatingOptions, 'performers') as $performer)
-                        <option value="{{$performer->performer_id}}">{{$performer->performer_name}}</option>
+                    @foreach($performers as $id => $name)
+                        <option value="{{$id}}">{{$name}}</option>
                     @endforeach
                 </select>
         </x-form.form-item>
 
         <x-form.form-item>
-            <label for="assigned_to_id">{{__('Метки')}}</label>
+            <label for="labels">@lang('interface.Labels')</label>
                 <select class="form-control" multiple="" name="labels[]">
-                    @foreach(data_get($creatingOptions, 'labels') as $label)
-                    <option value="{{$label->id}}">{{$label->name}}</option>
+                    <option value=""></option>
+                    @foreach($labels as $id => $name)
+                    <option value="{{$id}}">{{$name}}</option>
                     @endforeach
                 </select>
         </x-form.form-item>
 
-        <x-form.submit value="Create" />
+        <x-form.submit value="{{__('interface.Create')}}" />
     </x-form.form>
 @endsection

@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
+use App\Domain\StatusRepositoryInterface;
 use App\Repositories\Status\StatusRepository;
-use App\Repositories\Status\StatusRepositoryInterface;
-
 use Illuminate\Support\ServiceProvider;
 
 class StatusRepositoryServiceProvider extends ServiceProvider
@@ -24,7 +25,7 @@ class StatusRepositoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->app->bind(StatusRepositoryInterface::class, StatusRepository::class);
     }

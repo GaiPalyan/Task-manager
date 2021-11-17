@@ -1,42 +1,43 @@
 @extends('layouts.app')
 @section('content')
     @include('flash::message')
-    <h1 class="mb-5">Labels</h1>
-    @if(auth()->user())
-            <a class="btn btn-primary ml-auto" href="{{route('labels.create')}}">{{__('Create label')}}</a>
-    @endif
+    <h1 class="mb-5">@lang('interface.Labels')</h1>
+    @auth
+        <a class="btn btn-primary ml-auto" href="{{route('labels.create')}}">@lang('interface.Create label')</a>
+    @endauth
     <table class="table mt-2">
         <thead>
             <tr>
-                <th>{{__('ID')}}</th>
-                <th>{{__('Имя')}}</th>
-                <th>{{__('Описание')}}</th>
-                <th>{{__('Дата создания')}}</th>
-                <th>{{__('Действия')}}</th>
+                <th>@lang('ID')</th>
+                <th>@lang('interface.Name')</th>
+                <th>@lang('interface.Description')</th>
+                <th>@lang('interface.Created at')</th>
+                @auth()
+                <th>@lang('interface.Actions')</th>
+                @endauth
             </tr>
         </thead>
         <tbody>
-        @foreach($labels as $label)
+        @foreach($labelsList as $label)
             <tr>
                 <td>{{$label->id}}</td>
                 <td>{{$label->name}}</td>
                 <td>{{$label->description}}</td>
-                <td>{{$label->created_at}}</td>
+                <td>{{$label->created_at->format('d.m.Y')}}</td>
+                @auth()
                 <td>
-                    @can('delete', $label)
-                        <a class="btn btn-danger btn-sm"
-                           data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{route('labels.destroy', $label)}}">
-                            {{__('delete')}}
-                        </a>
-                    @endcan
-                    @can('update', $label)
-                         <a class="btn btn-success btn-sm" href="{{route('labels.edit', $label)}}">
-                                {{__('edit')}}
-                         </a>
-                    @endcan
+                    <a class="btn btn-outline-danger btn-sm"
+                       data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{route('labels.destroy', $label)}}">
+                        @lang('interface.Delete')
+                    </a>
+                    <a class="btn btn-outline-success btn-sm" href="{{route('labels.edit', $label)}}">
+                        @lang('interface.Edit')
+                    </a>
                 </td>
+                @endauth
             </tr>
         @endforeach
         </tbody>
     </table>
+    {{$labelsList->links()}}
 @endsection

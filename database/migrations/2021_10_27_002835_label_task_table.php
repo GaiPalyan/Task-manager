@@ -11,7 +11,7 @@ class LabelTaskTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('label_task', function (Blueprint $table) {
             $table->unsignedInteger('task_id');

@@ -37,10 +37,16 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['rollbar', 'single'],
             'ignore_exceptions' => false,
         ],
 
+        'rollbar' => [
+            'driver' => 'monolog',
+            'handler' => \Rollbar\Laravel\MonologHandler::class,
+            'access_token' => env('ROLLBAR_TOKEN'),
+            'level' => 'debug',
+        ],
 
         'single' => [
             'driver' => 'single',
@@ -101,11 +107,5 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
-    ],
-    'rollbar' => [
-        'driver' => 'monolog',
-        'handler' => \Rollbar\Laravel\MonologHandler::class,
-        'access_token' => env('ROLLBAR_TOKEN'),
-        'level' => 'debug',
     ],
 ];

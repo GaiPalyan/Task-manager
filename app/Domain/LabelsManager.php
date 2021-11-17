@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain;
 
+use App\Http\Requests\LabelRequests\LabelRequestData;
 use App\Models\Label;
-use App\Repositories\Label\LabelRepositoryInterface;
 
 class LabelsManager
 {
@@ -16,17 +18,18 @@ class LabelsManager
 
     public function getLabels(): array
     {
-        return $this->labelsRepository->getList();
+        $labelsList = $this->labelsRepository->getList();
+        return compact('labelsList');
     }
 
-    public function saveLabel(array $data): void
+    public function saveLabel(LabelRequestData $inputData): void
     {
-        $this->labelsRepository->store($data);
+        $this->labelsRepository->store($inputData->toArray());
     }
 
-    public function updateLabel(array $data, Label $label): void
+    public function updateLabel(LabelRequestData $inputData, Label $label): void
     {
-        $this->labelsRepository->update($data, $label);
+        $this->labelsRepository->update($inputData->toArray(), $label);
     }
 
     public function deleteLabel(Label $label): void
@@ -38,5 +41,4 @@ class LabelsManager
     {
         return $label->tasks()->exists();
     }
-
 }

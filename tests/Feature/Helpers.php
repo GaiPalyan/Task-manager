@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\Label;
@@ -7,11 +9,12 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @throws Exception
  */
-function make($subject)
+function make(string $subject): Factory
 {
     return match ($subject) {
         User::class => User::factory(),
@@ -21,4 +24,3 @@ function make($subject)
         default => throw new Exception('Wrong subject'),
     };
 }
-

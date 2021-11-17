@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Label;
@@ -14,8 +16,9 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      *
      * @return void
+     * @throws \Exception
      */
-    public function run()
+    public function run(): void
     {
         TaskStatus::factory()->count(4)
                             ->state(new Sequence(
@@ -31,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $labels = Label::all();
         Task::factory()->count(5)->create()
             ->each(static function (Task $task) use ($labels) {
-                $task->labels()->attach($labels->random(random_int(1,5)));
+                $task->labels()->attach($labels->random(random_int(1, 5)));
             });
        // $this->call(TaskStatusSeeder::class, 20);
     }

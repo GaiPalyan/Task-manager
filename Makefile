@@ -4,18 +4,24 @@ setup:
 	composer install
 	npm install
 	cp -n .env.example .env || true
+	touch database/database.sqlite || true
 	php artisan key:gen --ansi
 	npm ci
 watch:
 	npm run watch
 migrate:
 	php artisan migrate
+seed:
+	php artisan migrate:refresh
+	php artisan db:seed
 console:
 	php artisan tinker
 log:
 	tail -f storage/logs/laravel.log
 deploy:
 	git push heroku
+detect:
+	composer phpmd app ansi phpmd.ruleset.xml
 lint:
 	composer phpcs
 lint-fix:
@@ -23,4 +29,12 @@ lint-fix:
 install:
 	composer install
 test:
+	php artisan config:clear
 	php artisan test
+clear:
+	php artisan route:clear
+	php artisan view:clear
+	php artisan cache:clear
+	php artisan config:clear
+push:
+	git push origin worker

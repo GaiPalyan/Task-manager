@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Form extends Component
@@ -9,8 +12,6 @@ class Form extends Component
     public string $method;
     /**
      * Create a new component instance.
-     *
-     * @return void
      */
     public function __construct(string $method)
     {
@@ -20,10 +21,10 @@ class Form extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
-        return view('components.form');
+        return view('components.form.form');
     }
 }

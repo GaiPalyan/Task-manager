@@ -1,6 +1,6 @@
 <x-form.form-item class="row">
     <x-form.label for="email">
-        {{ __('E-Mail Address') }}
+        @lang('interface.Email')
     </x-form.label>
 
     <div class="col-md-6">
@@ -17,7 +17,7 @@
 
     <x-form.form-item class="row">
         <x-form.label for="password">
-            {{ __('Password') }}
+            @lang('interface.Password')
         </x-form.label>
 
         <div class="col-md-6">

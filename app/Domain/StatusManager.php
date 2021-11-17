@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain;
 
+use App\Http\Requests\StatusRequests\StatusRequestData;
 use App\Models\TaskStatus;
-use App\Repositories\Status\StatusRepositoryInterface;
-use Illuminate\Contracts\Auth\Authenticatable;
 
 class StatusManager
 {
@@ -17,22 +18,23 @@ class StatusManager
 
     public function getStatusList(): array
     {
-        return $this->statusRepository->getList();
+        $statusesList = $this->statusRepository->getList();
+        return compact('statusesList');
     }
 
-    public function getStatus(int $id): TaskStatus
+    public function getStatus(int $id): ?TaskStatus
     {
-        return $this->statusRepository->getStatusById($id);
+        return $this->statusRepository->getStatus($id);
     }
 
-    public function saveStatus(array $data): void
+    public function saveStatus(StatusRequestData $inputData): void
     {
-       $this->statusRepository->store($data);
+        $this->statusRepository->store($inputData->toArray());
     }
 
-    public function updateStatus(array $data, TaskStatus $status): void
+    public function updateStatus(StatusRequestData $inputData, TaskStatus $status): void
     {
-        $this->statusRepository->update($data, $status);
+        $this->statusRepository->update($inputData->toArray(), $status);
     }
 
     public function deleteStatus(TaskStatus $status): void

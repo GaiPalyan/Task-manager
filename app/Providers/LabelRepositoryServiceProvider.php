@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
+use App\Domain\LabelRepositoryInterface;
 use App\Repositories\Label\LabelRepository;
-use App\Repositories\Label\LabelRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class LabelRepositoryServiceProvider extends ServiceProvider
@@ -13,7 +15,7 @@ class LabelRepositoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
@@ -23,7 +25,7 @@ class LabelRepositoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->app->bind(LabelRepositoryInterface::class, LabelRepository::class);
     }

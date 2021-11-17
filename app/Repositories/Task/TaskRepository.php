@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Task;
 
+use App\Domain\TaskRepositoryInterface;
+use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -27,57 +29,60 @@ class TaskRepository implements TaskRepositoryInterface
             )->paginate(10);
     }
 
-    public function getAvailableFilterOptions(): Collection
+    public function getCreators(): array
     {
         return Task::join('users as creators', 'tasks.created_by_id', '=', 'creators.id')
-             ->join('task_statuses as statuses', 'tasks.status_id', '=', 'statuses.id')
-             ->selectRaw('creators.id as creator_id, creators.name as creator_name,
-                          statuses.id as status_id, statuses.name as status_name')
-             ->distinct()
-             ->get();
+              ->selectRaw('creators.id, creators.name')
+              ->pluck('name', 'id')
+              ->toArray();
     }
 
-    public function getAssignedPerformersList(): Collection
+    public function getAssignedPerformers(): array
     {
         return Task::join('users as performers', 'tasks.assigned_to_id', '=', 'performers.id')
-             ->selectRaw('performers.id as performer_id, performers.name as performer_name')
-             ->distinct()
-             ->get();
+              ->selectRaw('performers.id, performers.name')
+              ->pluck('name', 'id')
+              ->toArray();
     }
 
-    public function getStatus(Task $task): TaskStatus | BelongsTo
+    public function getAvailablePerformers(): array
     {
-        return $task->status()->firstOrFail();
+        return User::pluck('name', 'id')->toArray();
     }
 
-    public function getTaskPerformer(Task $task): User | BelongsTo
+    /**
+     * @throws Exception
+     */
+    public function getRelatedData(Task $task, string $relation): array
     {
-        return $task->performer()->firstOrFail();
+        $result = match ($relation) {
+            TaskStatus::class => $task->status(),
+            Label::class => $task->labels(),
+            User::class => $task->performer(),
+            default => throw new Exception('Undefined relation'),
+        };
+
+        return $result->pluck('name', 'id')->toArray();
     }
 
-    public function getTaskLabels(Task $task): Collection
+    public function store(User $creator, array $requestData, TaskStatus $status): void
     {
-        return $task->labels()->get();
-    }
-
-    public function store(Authenticatable $creator, array $data, TaskStatus $status): void
-    {
-        $task = User::findOrFail($creator->getAuthIdentifier())
-             ->task()
-             ->make($data)
-             ->status()
-             ->associate($status);
+        $task = new Task();
+        $task->creator()->associate($creator);
+        $task->status()->associate($status);
+        $task->fill($requestData);
         $task->save();
 
-        if (isset($data['labels'])) {
-            $task->labels()->attach($data['labels']);
+        if (isset($requestData['labels'])) {
+            $task->labels()->attach($requestData['labels']);
         }
     }
 
-    public function update(array $data, Task $task): void
+    public function update(array $requestData, Task $task): void
     {
-        $task->fill($data);
+        $task->fill($requestData);
         $task->save();
+        $task->labels()->sync($requestData['labels']);
     }
 
     public function delete(Task $task): void

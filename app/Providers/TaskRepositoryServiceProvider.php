@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Repositories\Task\TaskRepository;
-use App\Repositories\Task\TaskRepositoryInterface;
+use App\Domain\TaskRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class TaskRepositoryServiceProvider extends ServiceProvider
@@ -23,7 +25,7 @@ class TaskRepositoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
     }

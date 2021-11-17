@@ -3,16 +3,22 @@
 namespace Tests;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+
 use function Tests\Feature\make;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication, RefreshDatabase;
+    use CreatesApplication;
+    use RefreshDatabase;
 
-    protected Model $user;
+    /**
+     * @var Collection|Model
+     */
+    protected Model|Collection $user;
 
     protected function setUp(): void
     {

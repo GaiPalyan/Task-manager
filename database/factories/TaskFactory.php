@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Task;
@@ -28,7 +30,7 @@ class TaskFactory extends Factory
             'description' => $this->faker->text,
             'status_id' => TaskStatus::factory(),
             'created_by_id' => User::factory(),
-            'assigned_to_id' => User::factory()
+            'assigned_to_id' => User::factory(),
         ];
     }
 }

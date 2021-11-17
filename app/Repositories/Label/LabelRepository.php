@@ -1,32 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Label;
 
+use App\Domain\LabelRepositoryInterface;
 use App\Models\Label;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class LabelRepository implements LabelRepositoryInterface
 {
-    /**
-     * @return array
-     */
-    public function getList(): array
+
+    public function getList(): LengthAwarePaginator
     {
-        $labels = Label::select('*')->orderByDesc('created_at')->paginate(10);
-        return compact('labels');
+        return Label::select('*')->orderByDesc('created_at')->paginate(10);
     }
 
-    /**
-     * @return array
-     */
-    public function getUniqueNamedList(): Collection
+    public function getFormOptions(): array
     {
-        return Label::distinct('name')->get();
+        return Label::pluck('name', 'id')->toArray();
     }
 
-    /**
-     * @param array $data
-     */
     public function store(array $data): void
     {
         $label = new Label();
@@ -34,10 +28,6 @@ class LabelRepository implements LabelRepositoryInterface
         $label->save();
     }
 
-    /**
-     * @param array $data
-     * @param Label $label
-     */
     public function update(array $data, Label $label): void
     {
         $label->fill($data);

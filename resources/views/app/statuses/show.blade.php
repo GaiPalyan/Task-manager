@@ -1,40 +1,40 @@
 @extends('layouts.app')
 @section('content')
-    <h1 class="mb-5">Statuses</h1>
-    @if(auth()->user())
-    <a class="btn btn-primary" href="{{route('statuses.create')}}">{{ __('Create status') }}</a>
-    @endif
+    <h1 class="mb-5">@lang('interface.Status')</h1>
+    @auth()
+    <a class="btn btn-primary" href="{{route('task_statuses.create')}}">@lang('interface.Create status')</a>
+    @endauth
     <table class="table mt-2">
         <thead>
             <tr>
-                <th>{{ __('ID') }}</th>
-                <th>{{ __('Name') }}</th>
-                <th>{{ __('Created date') }}</th>
-                <th>{{ __('action') }}</th>
+                <th>@lang('ID')</th>
+                <th>@lang('interface.Name')</th>
+                <th>@lang('interface.Created at')</th>
+                @auth()
+                <th>@lang('interface.Actions')</th>
+                @endauth
             </tr>
         </thead>
         <tbody>
-            @foreach($statuses as $status)
+            @foreach($statusesList as $status)
                 <tr>
                     <td>{{$status->id}}</td>
                     <td>{{$status->name}}</td>
-                    <td>{{$status->created_at}}</td>
+                    <td>{{$status->created_at->format('d.m.Y')}}</td>
+                    @auth()
                     <td>
-                            @can('delete', $status)
-                                <a class="btn btn-danger btn-sm ml-2"
-                                data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('statuses.destroy', $status) }}">
-                                    {{__('delete')}}
-                                </a>
-                            @endcan
-                            @can('update', $status)
-                                <a class="btn btn-success btn-sm float-left" href="{{ route('statuses.edit', $status) }}">
-                                    {{__('edit')}}
-                                </a>
-                            @endcan
+                        <a class="btn btn-outline-danger btn-sm"
+                           data-confirm="Вы уверены?" data-method="delete" rel="nofollow" href="{{ route('task_statuses.destroy', $status) }}">
+                            @lang('interface.Delete')
+                        </a>
+                        <a class="btn btn-outline-success btn-sm" href="{{ route('task_statuses.edit', $status) }}">
+                            @lang('interface.Edit')
+                        </a>
                     </td>
+                    @endauth
                 </tr>
             @endforeach
         </tbody>
     </table>
-    {{ $statuses->links() }}
+    {{ $statusesList->links() }}
 @endsection
