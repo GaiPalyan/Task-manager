@@ -1,12 +1,16 @@
 ### To-Do manager with Laravel
 
+[Click](http://extview.herokuapp.com/)
+
 ~~~
 1. $ git clone git@github.com:GaiPalyan/php-project-lvl4.git
 2. $ make setup
 3. $ make migrate
 4. $ make start
 ~~~
-
+[![Альтернативный текст](laravel-logo.jpg)](https://laravel.com/)
+===================================
+[![Альтернативный текст](heroku-logo.png)](https://devcenter.heroku.com/start)
 
 #### Tests and linter status:
 [![PHP CI](https://github.com/GaiPalyan/php-project-lvl4/actions/workflows/PHP-CI.yml/badge.svg)](https://github.com/GaiPalyan/php-project-lvl4/actions/workflows/PHP-CI.yml)
