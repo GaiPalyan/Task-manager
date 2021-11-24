@@ -1,6 +1,6 @@
 ### To-Do manager with Laravel
 
-[Click](http://extview.herokuapp.com/)
+[Click](https://intostrada.herokuapp.com/)
 
 ~~~
 1. $ git clone git@github.com:GaiPalyan/php-project-lvl4.git
